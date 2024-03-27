@@ -30,11 +30,15 @@ fn Home() -> Element {
     rsx! {
         div { class: "w-full h-full items-start justify-start",
             Row {
+                class: "w-full",
+                main_axis_alignment: MainAxisAlignment::Start,
+                cross_axis_alignment: CrossAxisAlignment::Start,
                 LeftPanel {}
                 MainPanel {}
                 RightPanel {}
             }
         }
+        nav {}
     }
 }
 
@@ -48,7 +52,7 @@ fn MainPanel() -> Element {
 #[component]
 fn RightPanel() -> Element {
     rsx! {
-        Expanded { class: "bg-yellow-500 w-1/4 lg:block hidden items-start justify-start", h1 { class: "title", "Right" } }
+        Expanded { class: " bg-yellow-500 w-1/4 lg:block hidden items-start justify-start", h1 { class: "title", "Right" } }
     }
 }
 

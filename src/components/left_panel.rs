@@ -4,7 +4,7 @@ use wheregmis::ui_core::prelude::*;
 pub fn LeftPanel() -> Element {
     rsx! {
         Expanded { class: "bg-gray-900 w-1/4 h-full md:block hidden m-5 shadow-neumorphic text-gray-300",
-            Column { class: "w-full h-full items-start justify-start", MyIntro {} }
+            Column { class: "w-full h-full items-start justify-start ", MyIntro {} }
         }
     }
 }
