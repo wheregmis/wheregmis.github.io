@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta charset="UTF-8" />
+    <title>Sabin Regmi | Rust Enthusiast</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.0.0/github-markdown-light.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // tailwind.config = {
+        //     theme: {
+        //         extend: {
+        //             colors: {
+        //                 clifford: "#da373d",
+        //             },
+        //         },
+        //     },
+        // };
+    </script>
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+            list-style: disc;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+    <div id="main"></div>
+    <script type="module">
+        import init from "/{base_path}/assets/dioxus/{app_name}.js";
+        init("/{base_path}/assets/dioxus/{app_name}_bg.wasm").then((wasm) => {
+            if (wasm.__wbindgen_start == undefined) {
+                wasm.main();
+            }
+        });
+    </script>
+    {script_include}
+</body>
+
+</html>
