@@ -21,7 +21,8 @@ pub fn BlogList() -> Element {
             ContentList {
                 header: rsx! {
                     div { class : "max-w-lg lg:max-w-2xl mx-auto mb-16 text-center", span { class :
-                    "text-xs font-semibold text-indigo-500 uppercase", "Jon's Blog" } h2 { class :
+                    "text-xs font-semibold text-indigo-500 uppercase", "Sabin Regmi's Blog" } h2 {
+                    class :
                     "mt-2 mb-4 text-3xl leading-tight md:text-4xl md:leading-tight lg:text-3xl lg:leading-tight font-bold font-heading",
                     "Musings about Engineering, Science, and Life" } p { class :
                     "text-base leading-relaxed lg:text-l lg:leading-relaxed text-gray-500 italic",

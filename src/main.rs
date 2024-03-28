@@ -45,14 +45,14 @@ fn Home() -> Element {
 #[component]
 fn MainPanel() -> Element {
     rsx! {
-        Expanded { class: "bg-slate-900 w-2/4 h-full", BlogList {} }
+        Expanded { class: "bg-gray-900 w-2/4 h-full", BlogList {} }
     }
 }
 
 #[component]
 fn RightPanel() -> Element {
     rsx! {
-        Expanded { class: " bg-yellow-500 w-1/4 lg:block hidden items-start justify-start", h1 { class: "title", "Right" } }
+        Expanded { class: " bg-gray-900 w-1/4 lg:block hidden items-start justify-start m-5", h1 { class: "title text-gray-500", "Comming Soon!!!" } }
     }
 }
 
