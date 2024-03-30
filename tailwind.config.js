@@ -8,6 +8,9 @@ module.exports = {
       boxShadow: {
         neumorphic: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff, 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       },
+      backgroundImage: theme => ({
+        'gradient-bg': 'linear-gradient(to right, #1A202C, black)', // bg-gray-950 is #1F2937
+      }),
       colors: {
         'background': '#121212', // Use for the background color of your application
         'on-background': '#FFFFFF', // Use for text and icons on top of the background color

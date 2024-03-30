@@ -3,7 +3,7 @@ use wheregmis::ui_core::prelude::*;
 #[component]
 pub fn LeftPanel() -> Element {
     rsx! {
-        Expanded { class: "bg-gray-900 w-1/4 h-full md:block hidden m-5 shadow-neumorphic text-gray-300",
+        Expanded { class: "bg-gray-900 w-1/4 h-full md:block hidden m-5 text-gray-300",
             Column {
                 class: "w-full h-full m-5",
                 main_axis_alignment: MainAxisAlignment::Start,
@@ -13,6 +13,8 @@ pub fn LeftPanel() -> Element {
                 // create a divider
                 div { class: "border border-gray-700 mt-5 -ml-5 w-full" }
                 MyWorkHistory {}
+                div { class: "border border-gray-700 mt-5 -ml-5 w-full" }
+                MyEducationHistory {}
             }
         }
     }
@@ -126,7 +128,7 @@ pub fn MyBio() -> Element {
 pub fn MyWorkHistory() -> Element {
     rsx! {
         div { class: "w-full mt-5 flex flex-col items-start justify-start",
-            h1 { "My Work History" }
+            h1 { "Work History" }
             div { class: "w-full mt-5 flex flex-row items-center justify-evenly -ml-5",
                 img {
                     class: "w-2 h-2 rounded-full mr-2",
@@ -150,6 +152,38 @@ pub fn MyWorkHistory() -> Element {
                     p { class: "text-xs text-gray-500", "Lambton College" }
                 }
                 p { class: "text-sm text-gray-500 ml-5", "Aug 2022 - Current" }
+            }
+        }
+    }
+}
+
+pub fn MyEducationHistory() -> Element {
+    rsx! {
+        div { class: "w-full mt-5 flex flex-col items-start justify-start",
+            h1 { "Education" }
+            div { class: "w-full mt-5 flex flex-row items-center justify-evenly -ml-5",
+                img {
+                    class: "w-2 h-2 rounded-full mr-2",
+                    src: "http://rustacean.net/assets/rustacean-flat-happy.png",
+                    alt: "Sabin Regmi"
+                }
+                div { class: "flex flex-col items-start justify-start",
+                    p { "Post Graduate" }
+                    p { class: "text-xs text-gray-500", "Lambton College" }
+                }
+                p { class: "text-sm text-gray-500 ml-5", "Jan 2022 - 2024" }
+            }
+            div { class: "w-full mt-5 flex flex-row items-start justify-evenly -ml-5",
+                img {
+                    class: "w-2 h-2 rounded-full mr-2 -ml-2",
+                    src: "http://rustacean.net/assets/rustacean-flat-happy.png",
+                    alt: "Sabin Regmi"
+                }
+                div { class: "flex flex-col items-start justify-start",
+                    p { "Bachelor's   " }
+                    p { class: "text-xs text-gray-500", "Leeds Beckett" }
+                }
+                p { class: "text-sm text-gray-500 ml-5", "Nov 2016 - 2019" }
             }
         }
     }
