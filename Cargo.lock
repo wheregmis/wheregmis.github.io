@@ -408,9 +408,9 @@ dependencies = [
 
 [[package]]
 name = "comrak"
-version = "0.21.0"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6751998a48e2327773c95f6f8e03c6e77c0156ce539d74c17d2199ff3d05e197"
+checksum = "d0436149c9f6a1935b13306206c739b1ba84fa81f551b5eb87fc2ca7a13700af"
 dependencies = [
  "derive_builder",
  "entities",
@@ -856,6 +856,15 @@ dependencies = [
  "urlencoding",
  "webbrowser",
  "wry",
+]
+
+[[package]]
+name = "dioxus-free-icons"
+version = "0.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82d16dd03f51f9023e088fbf7f87820e3eba012d221c380bdb6cb5a11a43f99f"
+dependencies = [
+ "dioxus",
 ]
 
 [[package]]
@@ -4489,6 +4498,7 @@ dependencies = [
  "comrak",
  "console_error_panic_hook",
  "dioxus",
+ "dioxus-free-icons",
  "dioxus-logger",
  "include_dir",
  "log",

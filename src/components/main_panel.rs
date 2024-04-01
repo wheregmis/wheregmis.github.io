@@ -1,7 +1,8 @@
-use dioxus::prelude::*;
-use wheregmis::ui_core::prelude::*;
-
 use crate::BlogList;
+use dioxus::prelude::*;
+use dioxus_free_icons::icons::hi_solid_icons::HiCode;
+use dioxus_free_icons::Icon;
+use wheregmis::ui_core::prelude::*;
 
 #[component]
 pub fn MainPanelClone() -> Element {
@@ -18,12 +19,8 @@ pub fn MainPanel() -> Element {
 #[component]
 pub fn Header() -> Element {
     rsx! {
-        div { class: "w-full h-full flex flex-row items-start justify-start m-5",
-            img {
-                class: "w-16 h-16 rounded-full",
-                src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                alt: "Sabin Regmi"
-            }
+        div { class: "w-full h-full flex flex-row items-center justify-start m-5",
+            Icon { class: "w-20 h-20 fill-gray-200", icon: HiCode }
 
             div { class: "w-full h-full flex-grow ml-10",
                 div { class: "w-full flex flex-row items-center justify-start",

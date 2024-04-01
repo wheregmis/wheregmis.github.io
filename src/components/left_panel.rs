@@ -1,4 +1,7 @@
 use dioxus::prelude::*;
+use dioxus_free_icons::icons::fa_brands_icons::FaGithub;
+use dioxus_free_icons::icons::hi_solid_icons::HiHome;
+use dioxus_free_icons::Icon;
 use wheregmis::ui_core::prelude::*;
 #[component]
 pub fn LeftPanel() -> Element {
@@ -33,18 +36,10 @@ pub fn MyIntro() -> Element {
                         alt: "Sabin Regmi"
                     }
                 }
-                Column {
-                    Row { main_axis_alignment: MainAxisAlignment::Start, cross_axis_alignment: CrossAxisAlignment::Start,
-                        img {
-                            class: "w-4 h-4 rounded-full mr-5",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
-                        img {
-                            class: "w-4 h-4 rounded-full",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
+                Column { 
+                    div { class: "flex flex-row items-end justify-between",
+                        Icon { class: "w-5 h-5 fill-white mr-4", icon: HiHome }
+                        Icon { class: "w-5 h-5 fill-white", icon: FaGithub }
                     }
                 }
             }
@@ -99,8 +94,8 @@ pub fn MyBio() -> Element {
                     class: "w-full mt-5 -ml-3",
                     main_axis_alignment: MainAxisAlignment::SpaceBetween,
                     cross_axis_alignment: CrossAxisAlignment::Start,
-                    Column {
-                        Row {
+                    Column { 
+                        Row { 
                             img {
                                 class: "w-2 h-2 rounded-full mr-2",
                                 src: "http://rustacean.net/assets/rustacean-flat-happy.png",
@@ -109,8 +104,8 @@ pub fn MyBio() -> Element {
                             h1 { class: "text-sm", "5 Years of Experience" }
                         }
                     }
-                    Column {
-                        Row {
+                    Column { 
+                        Row { 
                             img {
                                 class: "w-2 h-3 rounded-full mr-2",
                                 src: "http://rustacean.net/assets/rustacean-flat-happy.png",

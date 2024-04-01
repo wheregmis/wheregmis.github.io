@@ -1,4 +1,7 @@
 use dioxus::prelude::*;
+use dioxus_free_icons::icons::fa_brands_icons::{FaGithub, FaLinkedin, FaReddit, FaTwitter};
+use dioxus_free_icons::icons::hi_solid_icons::HiCode;
+use dioxus_free_icons::Icon;
 use wheregmis::ui_core::prelude::Expanded;
 
 #[component]
@@ -27,11 +30,7 @@ pub fn RightPanel() -> Element {
                     // Create a section for opensource contributions
                     h1 { class: "text-2xl font-bold text-white m-5", "Contributions" }
                     div { class: "w-full h-full flex flex-row items-center justify-evenly",
-                        img {
-                            class: "w-4 h-4 rounded-full mr-5",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
+                        Icon { class: "w-5 h-5 fill-white", icon: HiCode }
                         p { class: "text-gray-500 text-sm", "RINF (Rust in Flutter)" }
                         a {
                             href: "/",
@@ -44,26 +43,10 @@ pub fn RightPanel() -> Element {
                     div { class: "border border-gray-700 mt-5 w-full" }
 
                     div { class: "w-full h-full flex flex-row items-center justify-evenly my-5",
-                        img {
-                            class: "w-4 h-4 rounded-full mr-5",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
-                        img {
-                            class: "w-4 h-4 rounded-full mr-5",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
-                        img {
-                            class: "w-4 h-4 rounded-full mr-5",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
-                        img {
-                            class: "w-4 h-4 rounded-full mr-5",
-                            src: "http://rustacean.net/assets/rustacean-flat-happy.png",
-                            alt: "Sabin Regmi"
-                        }
+                        Icon { class: "w-5 h-5 fill-white", icon: FaGithub }
+                        Icon { class: "w-5 h-5 fill-white", icon: FaLinkedin }
+                        Icon { class: "w-5 h-5 fill-white", icon: FaReddit }
+                        Icon { class: "w-5 h-5 fill-white", icon: FaTwitter }
                     }
                 }
             }
