@@ -1,9 +1,7 @@
-#![allow(non_snake_case)]
-
 use dioxus::prelude::*;
-use log::{debug, info};
+use pulldown_cmark::{html, Parser};
 
-#[derive(Props, Clone, PartialEq)]
+#[derive(Props, PartialEq, Clone)]
 pub struct MarkdownProps {
     #[props(default)]
     id: String,
@@ -12,54 +10,17 @@ pub struct MarkdownProps {
     content: String,
 }
 
-/// Render some text as markdown.
+#[component]
 pub fn Markdown(props: MarkdownProps) -> Element {
-    let html = markdown::to_html(&props.content);
+    let parser = Parser::new(&props.content);
+    let mut html_buf = String::new();
+    html::push_html(&mut html_buf, parser);
 
     rsx! {
-        iframe {
-            srcdoc: format!(
-                r#"
-                                                                                <!DOCTYPE html>
-                                                                                <html class="dark">
-                                                                                <head>
-                                                                                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-                                                                                    
-                                                                                </head>
-                                                                                <body>
-                                                                                    <div id="{}" class="{}" style="width: 100%;">
-                                                                                        {}
-                                                                                    </div>
-                                                                                </body>
-                                                                                </html>
-                                                                                "#,
-                props.id,
-                props.class,
-                html,
-            ),
-            style: "width: 100%; height: 80vh; border: none;",
-            class: "w-full"
+        div {
+            id: "{props.id}",
+            class: "prose prose-invert max-w-none {props.class}",
+            dangerous_inner_html: "{html_buf}"
         }
     }
 }
-
-// rsx! {iframe { srcdoc: format!(
-//     r#"
-//                     <!DOCTYPE html>
-//                     <html class="dark">
-//                     <head>
-//                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1./css/bulma.min.css">
-
-//                     </head>
-//                     <body>
-//                         <div id="{}" class="{}" style="width: 100%;">
-//                             {}
-//                         </div>
-//                     </body>
-//                     </html>
-//                     "#,
-//     props.id,
-//     props.class,
-//     html,
-// ), class: "w-full h-full bg-gray-900" }
-// }

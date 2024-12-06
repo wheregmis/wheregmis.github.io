@@ -1,5 +1,5 @@
 +++
-title = "Getting Started with Rust and Dioxus 2"
+title = "Getting Started with Rust and Dioxus Copy"
 date = "2024-03-15"
 description = "Learn how to build modern web applications with Rust and Dioxus framework"
 image = "http://rustacean.net/assets/rustacean-flat-happy.png"

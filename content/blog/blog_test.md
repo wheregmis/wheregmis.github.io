@@ -1,16 +1,34 @@
 +++
-date = "2020-01-05T19:41:01+05:30"
+title = "Getting Started with Rust and Dioxus"
+date = "2024-03-15"
+description = "Learn how to build modern web applications with Rust and Dioxus framework"
 image = "http://rustacean.net/assets/rustacean-flat-happy.png"
-showonlyimage = false
-title = "Going Full time with Rust"
-weight = 18
-generatepage = false
+tags = ["rust", "web-dev", "tutorial"]
 +++
 
-## Hello, *world*!
+# Getting Started with Rust and Dioxus
 
+## Introduction
+Building web applications in Rust has never been more exciting. With Dioxus, we get the power of Rust's safety and performance combined with a React-like developer experience.
 
-I have read a lot about what's left in the rust community.
+## Why Rust for Web Development?
+- **Performance**: Lightning-fast runtime performance
+- **Safety**: Memory safety without garbage collection
+- **Modern Tooling**: Rich ecosystem and excellent developer experience
 
-Hey there whats up how is it going?
-
+## Code Example
+```rust
+#[component]
+fn App() -> Element {
+    let count = use_signal(|| 0);
+    
+    rsx! {
+        div {
+            h1 { "Hello from Dioxus!" }
+            button { 
+                onclick: move |_| count += 1,
+                "Clicks: {count}"
+            }
+        }
+    }
+}

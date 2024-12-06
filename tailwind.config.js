@@ -5,6 +5,15 @@ module.exports = {
   content: ["./src/**/*.{rs,html,css}", "./dist/**/*.html"],
   theme: {
     extend: {
+      keyframes: {
+        down: {
+          '0%': { transform: 'translateY(0%)' },
+          '100%': { transform: 'translateY(calc(45vh - 8rem))' }
+        }
+      },
+      animation: {
+        'move-down': 'down 3s linear infinite'
+      },
       boxShadow: {
         neumorphic: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff, 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       },

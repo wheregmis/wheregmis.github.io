@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Box Animation</title>
+</head>
+
+<body>
+    <div id="box" style="width: 100px; height: 100px; background-color: blue;"></div>
+    <script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+    <script>
+
+        const { animate, scroll } = Motion
+        animate("#box", {
+            x: 200,
+            rotate: 360,
+            duration: 10,
+            loop: true,
+            direction: "alternate"
+        })
+    </script>
+</body>
+
+</html>
