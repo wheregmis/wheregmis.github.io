@@ -15,7 +15,7 @@ struct Frontmatter {
     tags: Vec<String>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct BlogPost {
     id: i32,
     title: String,
@@ -62,8 +62,10 @@ impl BlogPost {
 pub fn BlogPreview() -> Element {
     let posts = BlogPost::all();
 
+    println!("{:?}", posts);
+
     rsx! {
-        div { class: "container mx-auto px-4 py-12",
+        div { id: "blogs", class: "container mx-auto px-4 py-12",
             h2 { class: "text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-2",
                 "Latest Blog Posts"
             }
@@ -93,8 +95,8 @@ pub fn BlogPreview() -> Element {
 
 #[component]
 pub fn Blog(id: i32) -> Element {
-    let post = BlogPost::new(1);
     let all_posts = BlogPost::all();
+    let post = BlogPost::new(id);
     let current_index = all_posts.iter().position(|p| p.id == id).unwrap();
     let has_previous = current_index > 0;
     let has_next = current_index < all_posts.len() - 1;
