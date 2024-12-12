@@ -6,6 +6,9 @@ use crate::Route;
 #[component]
 pub fn NavBar() -> Element {
     let path: Route = use_route();
+
+    let is_blog = path.to_string().starts_with("/blo");
+
     rsx! {
         div { class: "w-full h-full flex flex-col items-center justify-center",
             header { class: "fixed top-0 w-full z-50 h-16 backdrop-blur-md border-b border-surface-light",
@@ -46,41 +49,45 @@ pub fn NavBar() -> Element {
                                         "Sabin Regmi"
                                     }
                                 }
-                                // Center - Navigation
+                                if !is_blog {
+                                    // Center - Navigation
                                 nav { class: "hidden md:flex items-center space-x-6",
-                                    for link in ["Experience", "Projects", "Blogs"].iter() {
-                                        a {
-                                            class: "text-sm text-text-secondary hover:text-text-primary transition-colors relative group cursor-pointer",
-                                            onclick: move |evt| {
-                                                evt.prevent_default();
-                                                eval(
-                                                    &format!(
-                                                        r#"
-   const element = document.getElementById('{}');
-    if (element) {{
-        const offset = 60;  // Adjust this value for desired offset
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({{
-            top: elementPosition - offset,
-            behavior: 'smooth'
-        }});
-    }}
-                                                                                                                                "#,
-                                                        link.to_lowercase(),
-                                                    ),
-                                                );
-                                            },
-                                            "{link}"
-                                            // Hover line effect
-                                            div { class: "absolute -bottom-1 left-0 h-[2px] w-0 bg-primary transition-all group-hover:w-full" }
-                                        }
+                                for link in ["Experience", "Projects", "Blogs"].iter() {
+                                    a {
+                                        class: "text-sm text-text-secondary hover:text-text-primary transition-colors relative group cursor-pointer",
+                                        onclick: move |evt| {
+                                            evt.prevent_default();
+                                            eval(
+                                                &format!(
+                                                    r#"
+const element = document.getElementById('{}');
+if (element) {{
+    const offset = 60;  // Adjust this value for desired offset
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({{
+        top: elementPosition - offset,
+        behavior: 'smooth'
+    }});
+}}
+                                                                                                                            "#,
+                                                    link.to_lowercase(),
+                                                ),
+                                            );
+                                        },
+                                        "{link}"
+                                        // Hover line effect
+                                        div { class: "absolute -bottom-1 left-0 h-[2px] w-0 bg-primary transition-all group-hover:w-full" }
                                     }
                                 }
                             }
+                                }
+                            }
                         }
-                        // Right side - Download CV
+                        if !is_blog {
+                            // Right side - Download CV
                         button { class: "ml-6 px-4 py-1.5 text-sm font-medium bg-surface hover:bg-surface-hover text-text-primary rounded-full transition-colors border border-surface-light/50",
-                            "Download CV"
+                        "Download CV"
+                    }
                         }
                     }
                 }
