@@ -5,6 +5,7 @@ use crate::Route;
 
 #[component]
 pub fn NavBar() -> Element {
+    let path: Route = use_route();
     rsx! {
         div { class: "w-full h-full flex flex-col items-center justify-center",
             header { class: "fixed top-0 w-full z-50 h-16 backdrop-blur-md border-b border-surface-light",
@@ -27,8 +28,21 @@ pub fn NavBar() -> Element {
                                         d: "M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
                                     }
                                 }
-                                Link { to: Route::Home {},
-                                    h1 { class: "text-lg font-semibold text-text-primary hover:text-primary transition-colors cursor-pointer",
+                                Link {
+                                    to: Route::Home {},
+                                    onclick: move |evt: Event<MouseData>| {
+                                        if path.to_string() == "/" {
+                                            evt.prevent_default();
+                                            eval(r#"
+                                                window.scrollTo({
+                                                    top: 0,
+                                                    behavior: 'smooth'
+                                                });
+                                            "#);
+                                        }
+                                    },
+                                    h1 {
+                                        class: "text-lg font-semibold text-text-primary hover:text-primary transition-colors cursor-pointer",
                                         "Sabin Regmi"
                                     }
                                 }
