@@ -6,6 +6,7 @@ use crate::Route;
 #[component]
 pub fn NavBar() -> Element {
     let path: Route = use_route();
+    let mut show_modal = use_signal(|| false);
 
     let is_blog = path.to_string().starts_with("/blo");
 
@@ -85,9 +86,48 @@ if (element) {{
                         }
                         if !is_blog {
                             // Right side - Download CV
-                        button { class: "ml-6 px-4 py-1.5 text-sm font-medium bg-surface hover:bg-surface-hover text-text-primary rounded-full transition-colors border border-surface-light/50",
-                        "Download CV"
+                        button {
+                            class: "ml-6 px-4 py-1.5 text-sm font-medium bg-surface hover:bg-surface-hover text-text-primary rounded-full transition-colors border border-surface-light/50",
+                            onclick: move |_| show_modal.set(true),
+                            "Download CV"
+                        }
+                        }
                     }
+                }
+            }
+            // Modal
+            if show_modal() {
+                div {
+                    class: "fixed inset-0 bg-background/80 backdrop-blur-sm z-50",
+                    onclick: move |_| show_modal.set(false),
+
+                    // Modal content
+                    div {
+                        class: "relative flex items-center justify-center w-96 max-w-[90%] bg-surface p-6 rounded-xl border border-surface-light shadow-xl",
+                        onclick: move |e| e.stop_propagation(),
+                        onmounted: move |_| {
+                            eval(r#"
+    Motion.animate('.modal-content', {
+        opacity: [0, 1],
+        scale: [0.9, 1]
+    }, {
+        duration: 0.3,
+        easing: 'ease-out'
+    });
+                            "#);
+                        },
+
+                        // Message
+                        p {
+                            class: "text-lg text-text-primary font-medium",
+                            "You still need my resume? Unbelievable! 😎"
+                        }
+
+                        // Close button
+                        button {
+                            class: "px-2 py-2 text-sm bg-primary hover:bg-primary-hover text-text-primary rounded-lg transition-colors",
+                            onclick: move |_| show_modal.set(false),
+                            "Sorry!"
                         }
                     }
                 }

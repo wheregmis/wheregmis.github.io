@@ -30,14 +30,14 @@ pub fn Profile() -> Element {
                                 onmounted: move |_| {
                                     eval(
                                         r#"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Motion.animate('#point-1', {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            opacity: [0, 1],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            x: [-20, 0]
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }, {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            duration: 0.5,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            delay: 0.2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "#,
+    Motion.animate('#point-1', {
+        opacity: [0, 1],
+        x: [-20, 0]
+    }, {
+        duration: 0.5,
+        delay: 0.7
+    });
+"#,
                                     );
                                 },
                                 span { class: "text-primary", "•" }
@@ -49,14 +49,14 @@ pub fn Profile() -> Element {
                                 onmounted: move |_| {
                                     eval(
                                         r#"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Motion.animate('#point-2', {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            opacity: [0, 1],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            x: [-20, 0]
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }, {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            duration: 0.5,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            delay: 0.3
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "#,
+    Motion.animate('#point-2', {
+        opacity: [0, 1],
+        x: [-20, 0]
+    }, {
+        duration: 0.5,
+        delay: 0.8
+    });
+"#,
                                     );
                                 },
                                 span { class: "text-primary", "•" }
@@ -68,14 +68,14 @@ pub fn Profile() -> Element {
                                 onmounted: move |_| {
                                     eval(
                                         r#"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Motion.animate('#point-3', {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            opacity: [0, 1],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            x: [-20, 0]
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }, {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            duration: 0.5,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            delay: 0.4
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "#,
+    Motion.animate('#point-3', {
+        opacity: [0, 1],
+        x: [-20, 0]
+    }, {
+        duration: 0.5,
+        delay: 0.9
+    });
+"#,
                                     );
                                 },
                                 span { class: "text-primary", "•" }
@@ -127,7 +127,7 @@ pub fn Profile() -> Element {
                                                                     rotate: [-10, 0]
                                                                 }, {
                                                                     duration: 0.8,
-                                                                    delay: 0.5,
+                                                                    delay: 2,
                                                                     easing: "spring(1, 100, 10, 0)"
                                                                 });
                                                             "#,

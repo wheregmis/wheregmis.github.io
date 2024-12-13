@@ -17,7 +17,7 @@ pub fn ProjectGrid() -> Element {
             // Project grid
             div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
                 ProjectCard {
-                    title: "HTML to Rsx",
+                    title: "HTML to RSX Converter",
                     description: "Convert HTML to Dioxus RSX with a single click.",
                     image: "https://devpro-aceternity.vercel.app/_next/image?url=%2Fimages%2Fprojects%2Falgochurn.png&w=3840&q=75",
                     tech_stack: vec!["Rust", "Dioxus", "Tailwind"],

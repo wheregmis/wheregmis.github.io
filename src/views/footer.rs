@@ -11,9 +11,7 @@ pub fn Footer() -> Element {
                         h3 { class: "text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-gray-100 to-gray-400",
                             "Sabin Regmi"
                         }
-                        p { class: "text-gray-400",
-                            "Building digital products, brands, and experiences."
-                        }
+                        p { class: "text-gray-400", "I will update this section soon !!!" }
                     }
                     // Quick links
                     div { class: "space-y-4",
@@ -34,17 +32,17 @@ pub fn Footer() -> Element {
                         div { class: "flex space-x-4",
                             a {
                                 class: "text-gray-400 hover:text-white transition-colors",
-                                href: "https://github.com/yourusername",
+                                href: "https://github.com/wheregmis",
                                 i { class: "fab fa-github text-xl" }
                             }
                             a {
                                 class: "text-gray-400 hover:text-white transition-colors",
-                                href: "https://twitter.com/yourusername",
+                                href: "https://twitter.com/wheregmis",
                                 i { class: "fab fa-twitter text-xl" }
                             }
                             a {
                                 class: "text-gray-400 hover:text-white transition-colors",
-                                href: "https://linkedin.com/in/yourusername",
+                                href: "https://linkedin.com/in/wheregmis",
                                 i { class: "fab fa-linkedin text-xl" }
                             }
                         }
@@ -52,7 +50,7 @@ pub fn Footer() -> Element {
                 }
                 // Copyright
                 div { class: "mt-12 pt-8 border-t border-gray-800 text-center text-gray-400",
-                    "© 2024 Sabin Regmi. All rights reserved."
+                    "© 2024 Sabin Regmi. All rights reserved. Thanks to ChatGPT for sucking in RUST"
                 }
             }
         }
