@@ -98,36 +98,39 @@ if (element) {{
             // Modal
             if show_modal() {
                 div {
-                    class: "fixed inset-0 bg-background/80 backdrop-blur-sm z-50",
+                    class: "fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-50",
                     onclick: move |_| show_modal.set(false),
 
                     // Modal content
                     div {
-                        class: "relative flex items-center justify-center w-96 max-w-[90%] bg-surface p-6 rounded-xl border border-surface-light shadow-xl",
+                        class: "relative w-full mx-4 md:max-w-2xl bg-surface p-8 rounded-xl border border-surface-light shadow-xl",
                         onclick: move |e| e.stop_propagation(),
                         onmounted: move |_| {
                             eval(r#"
-    Motion.animate('.modal-content', {
-        opacity: [0, 1],
-        scale: [0.9, 1]
-    }, {
-        duration: 0.3,
-        easing: 'ease-out'
-    });
+                                Motion.animate('.modal-content', {
+                                    opacity: [0, 1],
+                                    scale: [0.9, 1]
+                                }, {
+                                    duration: 0.3,
+                                    easing: 'ease-out'
+                                });
                             "#);
                         },
 
                         // Message
                         p {
-                            class: "text-lg text-text-primary font-medium",
-                            "You still need my resume? Unbelievable! 😎"
+                            class: "text-xl text-center text-text-primary font-medium mb-6",
+                            "You still need my CV? Unbelievable! 😂"
                         }
 
                         // Close button
-                        button {
-                            class: "px-2 py-2 text-sm bg-primary hover:bg-primary-hover text-text-primary rounded-lg transition-colors",
-                            onclick: move |_| show_modal.set(false),
-                            "Sorry!"
+                        div {
+                            class: "flex justify-center",
+                            button {
+                                class: "px-6 py-2 text-sm bg-surface-light hover:bg-primary-hover text-text-primary rounded-lg transition-colors",
+                                onclick: move |_| show_modal.set(false),
+                                "Sorry!"
+                            }
                         }
                     }
                 }

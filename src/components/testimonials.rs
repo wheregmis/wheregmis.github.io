@@ -1,5 +1,7 @@
 use dioxus::prelude::*;
 
+use crate::PROFILE_PIC;
+
 #[derive(Props, PartialEq, Clone)]
 struct TestimonialProps {
     name: String,
@@ -16,7 +18,7 @@ pub fn Testimonials() -> Element {
             name: "Sabin".into(),
             role: "I Myself".into(),
             company: "My Own World".into(),
-            avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg".into(),
+            avatar: PROFILE_PIC.to_string(),
             quote: "I am fucking awesome and i know it, Before someput put testimonials i need to judge myself".into(),
         },
         TestimonialProps {

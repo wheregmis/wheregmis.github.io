@@ -21,7 +21,7 @@ enum Route {
 }
 
 const MAIN_CSS: Asset = asset!("/assets/main.css");
-
+pub const PROFILE_PIC: Asset = asset!("/assets/pf.png");
 fn main() {
     dioxus_logger::init(Level::INFO).expect("failed to init logger");
     dioxus::launch(App);

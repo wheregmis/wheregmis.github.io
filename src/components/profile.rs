@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use document::eval;
 
-const PROFILE_PIC: Asset = asset!("/assets/pf.png");
+use crate::PROFILE_PIC;
 
 #[component]
 pub fn Profile() -> Element {
