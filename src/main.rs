@@ -44,15 +44,28 @@ fn App() -> Element {
     }
 }
 
+// Home component - Main landing page container
 #[component]
 fn Home() -> Element {
     rsx! {
+        // Main container div with Tailwind CSS classes for centering and max-width
         div { class: "container mx-auto",
+            // Profile section - Displays personal/bio information
             Profile {}
+
+            // Work Experience section - Shows professional history
             WorkExperience {}
+
+            // Project Grid - Displays portfolio of projects
             ProjectGrid {}
+
+            // Blog Preview - Shows recent blog posts
             BlogPreview {}
+
+            // Testimonials section - Displays client/colleague feedback
             Testimonials {}
+
+            // Footer component - Contains contact info and site navigation
             Footer {}
         }
     }

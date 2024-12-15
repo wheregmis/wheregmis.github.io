@@ -7,8 +7,8 @@ pub fn WorkExperience() -> Element {
 
     let companies = [
         (
-            "TROES Corp", 
-            "2021 - Present", 
+            "TROES Corp",
+            "2021 - Present",
             "Software Engineer",
             "Led development of battery management systems and remote monitoring solutions, resulting in 40% efficiency improvement in data processing.",
             vec![
@@ -56,7 +56,7 @@ pub fn WorkExperience() -> Element {
                 }
                 // Companies list
                 div { class: "space-y-8 pl-4",
-                    for (index , (company , duration , title , description , tech_stack)) in companies.iter().enumerate() {
+                    for (index , (company , duration , _title , _description , _tech_stack)) in companies.iter().enumerate() {
                         div {
                             class: "relative cursor-pointer group",
                             onclick: move |_| selected_company.set(index),
