@@ -11,14 +11,19 @@ pub fn NavBar() -> Element {
     let is_blog = path.to_string().starts_with("/blo");
 
     rsx! {
-        div { class: "w-full h-full flex flex-col items-center justify-center",
-            header { class: "fixed top-0 w-full z-50 h-16 backdrop-blur-md border-b border-surface-light",
-                div { class: "container mx-auto h-full px-4",
-                    div { class: "flex items-center justify-between h-full",
+        div {
+            class: "w-full h-full bg-background text-text-secondary",
+            header {
+                class: "fixed top-0 w-full z-50 h-16 backdrop-blur-md border-b border-surface-light/20",
+                div {
+                    class: "container mx-auto h-full px-4",
+                    div {
+                        class: "flex items-center justify-between h-full",
                         // Left side - Logo and name
-                        div { class: "flex items-center space-x-3",
-                            // Container for name and nav
-                            div { class: "flex items-center gap-8 px-6 py-2 bg-surface/50 backdrop-blur-sm border border-surface-light/50 rounded-full shadow-lg shadow-background/20",
+                        div {
+                            class: "flex items-center space-x-3",
+                            div {
+                                class: "flex items-center gap-8 px-6 py-2 bg-surface/50 backdrop-blur-sm border border-surface-light/10 rounded-full shadow-lg shadow-background/5",
                                 svg {
                                     class: "w-8 h-8 text-text-secondary",
                                     xmlns: "http://www.w3.org/2000/svg",
@@ -51,16 +56,16 @@ pub fn NavBar() -> Element {
                                     }
                                 }
                                 if !is_blog {
-                                    // Center - Navigation
-                                nav { class: "hidden md:flex items-center space-x-6",
-                                for link in ["Experience", "Projects", "Blogs"].iter() {
-                                    a {
-                                        class: "text-sm text-text-secondary hover:text-text-primary transition-colors relative group cursor-pointer",
-                                        onclick: move |evt| {
-                                            evt.prevent_default();
-                                            eval(
-                                                &format!(
-                                                    r#"
+                                    nav {
+                                        class: "hidden md:flex items-center space-x-6",
+                                        for link in ["Experience", "Projects", "Blogs"].iter() {
+                                            a {
+                                                class: "text-sm text-text-secondary hover:text-text-primary transition-colors relative group cursor-pointer",
+                                                onclick: move |evt| {
+                                                    evt.prevent_default();
+                                                    eval(
+                                                        &format!(
+                                                            r#"
 const element = document.getElementById('{}');
 if (element) {{
     const offset = 60;  // Adjust this value for desired offset
@@ -70,27 +75,27 @@ if (element) {{
         behavior: 'smooth'
     }});
 }}
-                                                                                                                            "#,
-                                                    link.to_lowercase(),
-                                                ),
-                                            );
-                                        },
-                                        "{link}"
-                                        // Hover line effect
-                                        div { class: "absolute -bottom-1 left-0 h-[2px] w-0 bg-primary transition-all group-hover:w-full" }
+                                                            "#,
+                                                            link.to_lowercase(),
+                                                        ),
+                                                    );
+                                                },
+                                                "{link}"
+                                                div {
+                                                    class: "absolute -bottom-1 left-0 h-[2px] w-0 bg-primary transition-all group-hover:w-full"
+                                                }
+                                            }
+                                        }
                                     }
-                                }
-                            }
                                 }
                             }
                         }
                         if !is_blog {
-                            // Right side - Download CV
-                        button {
-                            class: "ml-6 px-4 py-1.5 text-sm font-medium bg-surface hover:bg-surface-hover text-text-primary rounded-full transition-colors border border-surface-light/50",
-                            onclick: move |_| show_modal.set(true),
-                            "Download CV"
-                        }
+                            button {
+                                class: "ml-6 px-4 py-1.5 text-sm font-medium bg-surface hover:bg-surface-hover text-text-primary rounded-full transition-colors border border-surface-light/20",
+                                onclick: move |_| show_modal.set(true),
+                                "Download CV"
+                            }
                         }
                     }
                 }
@@ -100,10 +105,8 @@ if (element) {{
                 div {
                     class: "fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-50",
                     onclick: move |_| show_modal.set(false),
-
-                    // Modal content
                     div {
-                        class: "relative w-full mx-4 md:max-w-2xl bg-surface p-8 rounded-xl border border-surface-light shadow-xl",
+                        class: "relative w-full mx-4 md:max-w-2xl bg-surface p-8 rounded-xl border border-surface-light/20 shadow-xl",
                         onclick: move |e| e.stop_propagation(),
                         onmounted: move |_| {
                             eval(r#"
@@ -116,18 +119,14 @@ if (element) {{
                                 });
                             "#);
                         },
-
-                        // Message
                         p {
                             class: "text-xl text-center text-text-primary font-medium mb-6",
                             "You still need my CV? Unbelievable! 😂"
                         }
-
-                        // Close button
                         div {
                             class: "flex justify-center",
                             button {
-                                class: "px-6 py-2 text-sm bg-surface-light hover:bg-primary-hover text-text-primary rounded-lg transition-colors",
+                                class: "px-6 py-2 text-sm bg-surface-light hover:bg-primary text-text-primary rounded-lg transition-colors",
                                 onclick: move |_| show_modal.set(false),
                                 "Sorry!"
                             }
@@ -135,7 +134,7 @@ if (element) {{
                     }
                 }
             }
-            div { class: "container mx-auto", Outlet::<Route> {} }
+            Outlet::<Route> {}
         }
     }
 }

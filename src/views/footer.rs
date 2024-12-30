@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Footer() -> Element {
     rsx! {
-        footer { class: "mt-auto bg-gradient-to-b from-gray-900 to-black border-t border-gray-800",
+        footer { class: "w-full mt-auto bg-gradient-to-b from-gray-900 to-black border-t border-gray-800",
             div { class: "container mx-auto px-4 py-12",
                 div { class: "grid grid-cols-1 md:grid-cols-3 gap-8",
                     // Logo and description

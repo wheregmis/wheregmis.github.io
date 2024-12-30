@@ -17,6 +17,7 @@ Building web applications in Rust has never been more exciting. With Dioxus, we 
 - **Modern Tooling**: Rich ecosystem and excellent developer experience
 
 ## Code Example
+
 ```rust
 #[component]
 fn App() -> Element {

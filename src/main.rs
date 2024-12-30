@@ -31,13 +31,10 @@ fn App() -> Element {
     rsx! {
         document::Title { "Sabin Regmi" }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+
         document::Link {
             rel: "stylesheet",
-            href: "https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css"
-        }
-        document::Link {
-            rel: "stylesheet",
-            href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css",
         }
 
         Router::<Route> {}
@@ -48,25 +45,25 @@ fn App() -> Element {
 #[component]
 fn Home() -> Element {
     rsx! {
-        // Main container div with Tailwind CSS classes for centering and max-width
-        div { class: "container mx-auto",
-            // Profile section - Displays personal/bio information
+        div { class: "min-h-screen bg-background text-text-primary",
+            // Main container
+            // Hero/Profile section
             Profile {}
 
-            // Work Experience section - Shows professional history
-            WorkExperience {}
+            // Work Experience section
+            div { class: "mt-20", WorkExperience {} }
 
-            // Project Grid - Displays portfolio of projects
-            ProjectGrid {}
+            // Project Grid
+            div { class: "mt-20", ProjectGrid {} }
 
-            // Blog Preview - Shows recent blog posts
-            BlogPreview {}
+            // Blog Preview
+            div { class: "mt-20", BlogPreview {} }
 
-            // Testimonials section - Displays client/colleague feedback
-            Testimonials {}
+            // Testimonials
+            div { class: "mt-20", Testimonials {} }
 
-            // Footer component - Contains contact info and site navigation
-            Footer {}
+            // Footer
+            div { class: "mt-20", Footer {} }
         }
     }
 }

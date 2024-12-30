@@ -50,7 +50,7 @@ pub fn Profile() -> Element {
 
         rsx! {
             p {
-                class: "text-gray-400 leading-relaxed flex items-center space-x-2",
+                class: "text-text-muted leading-relaxed flex items-center space-x-2",
                 style: "{transform.style()}",
                 onmounted: move |_| {
                     transform.start();
@@ -63,31 +63,31 @@ pub fn Profile() -> Element {
 
     rsx! {
         div { class: "container mx-auto px-4 pt-20",
-            div { class: "relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 border border-gray-800",
+            div { class: "relative overflow-hidden rounded-xl bg-gradient-to-br from-surface via-surface-dark to-surface p-8 border border-surface-light",
                 // Gradient overlay
-                div { class: "absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10" }
+                div { class: "absolute inset-0 bg-gradient-to-br from-primary/10 via-accent-purple/10 to-secondary/10" }
                 // Content container with flex
                 div { class: "relative z-10 flex items-start justify-between gap-8",
                     // Left content
                     div { class: "flex-1",
                         // Heading
-                        h1 { class: "text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500",
+                        h1 { class: "text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-light to-accent-purple",
                             "Software Engineer"
                         }
                         // Main description
-                        p { class: "mt-4 text-xl text-gray-300 leading-relaxed",
+                        p { class: "mt-4 text-xl text-text-secondary leading-relaxed",
                             "Pioneering the future of battery technology with Rust-powered solutions."
                         }
 
                         div { class: "mt-6 space-y-2", {point_animations} }
                         // Current work
-                        p { class: "mt-4 text-gray-400",
+                        p { class: "mt-4 text-text-muted",
                             "Working with "
-                            span { class: "text-blue-400 hover:text-blue-300 transition-colors",
+                            span { class: "text-primary hover:text-primary-light transition-colors",
                                 "Rust"
                             }
                             " and "
-                            span { class: "text-purple-400 hover:text-purple-300 transition-colors",
+                            span { class: "text-accent-purple hover:text-accent-purple-hover transition-colors",
                                 "Dioxus"
                             }
                             " when I'm not working on my day job."
@@ -95,17 +95,17 @@ pub fn Profile() -> Element {
                         // Social links
                         div { class: "mt-8 flex items-center space-x-4",
                             a {
-                                class: "text-gray-400 hover:text-white transition-colors",
+                                class: "text-text-muted hover:text-text-primary transition-colors",
                                 href: "https://github.com/yourusername",
                                 i { class: "fab fa-github text-xl" }
                             }
                             a {
-                                class: "text-gray-400 hover:text-white transition-colors",
+                                class: "text-text-muted hover:text-text-primary transition-colors",
                                 href: "https://twitter.com/yourusername",
                                 i { class: "fab fa-twitter text-xl" }
                             }
                             a {
-                                class: "text-gray-400 hover:text-white transition-colors",
+                                class: "text-text-muted hover:text-text-primary transition-colors",
                                 href: "https://linkedin.com/in/yourusername",
                                 i { class: "fab fa-linkedin text-xl" }
                             }
@@ -129,7 +129,7 @@ pub fn Profile() -> Element {
                                 alt: "Sabin Regmi",
                             }
                             // AI Generated text overlay
-                            div { class: "absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-xs text-white/70 group-hover:text-white/90 transition-colors",
+                            div { class: "absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-surface/50 backdrop-blur-sm text-xs text-text-muted group-hover:text-text-secondary transition-colors",
                                 "Apple Playground AI Generated"
                             }
                         }

@@ -17,14 +17,18 @@ pub fn Markdown(props: MarkdownProps) -> Element {
     html::push_html(&mut html_buf, parser);
 
     rsx! {
-        // document::Link {
-        //     rel: "stylesheet",
-        //     href: "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-        // }
+        document::Link {
+            rel: "stylesheet",
+            href: "https://cdn.jsdelivr.net/npm/star-markdown-css/dist/planet/markdown.min.css",
+        }
+        document::Link {
+            rel: "stylesheet",
+            href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css",
+        }
         div {
             id: "{props.id}",
             class: "prose prose-invert max-w-none {props.class}",
-            dangerous_inner_html: "{html_buf}"
+            dangerous_inner_html: "{html_buf}",
         }
     }
 }
