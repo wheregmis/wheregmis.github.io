@@ -561,6 +561,13 @@ video {
   --primary-foreground: 210 40% 98%;
 }
 
+.dark {
+  --background: 224 71% 4%;
+  --foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+}
+
 .container {
   width: 100%;
 }
@@ -1013,11 +1020,11 @@ video {
 
 .bg-background {
   --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
+  background-color: rgb(10 15 26 / var(--tw-bg-opacity, 1));
 }
 
 .bg-background\/80 {
-  background-color: rgb(17 24 39 / 0.8);
+  background-color: rgb(10 15 26 / 0.8);
 }
 
 .bg-blue-500 {
@@ -1115,12 +1122,6 @@ video {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
-.from-text-primary {
-  --tw-gradient-from: #FFFFFF var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
 .via-accent-purple\/10 {
   --tw-gradient-to: rgb(192 132 252 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), rgb(192 132 252 / 0.1) var(--tw-gradient-via-position), var(--tw-gradient-to);
@@ -1162,14 +1163,6 @@ video {
 
 .to-surface {
   --tw-gradient-to: #1F2937 var(--tw-gradient-to-position);
-}
-
-.to-background {
-  --tw-gradient-to: #111827 var(--tw-gradient-to-position);
-}
-
-.to-text-secondary {
-  --tw-gradient-to: #D1D5DB var(--tw-gradient-to-position);
 }
 
 .bg-clip-text {
@@ -1361,7 +1354,7 @@ video {
 }
 
 .shadow-background\/5 {
-  --tw-shadow-color: rgb(17 24 39 / 0.05);
+  --tw-shadow-color: rgb(10 15 26 / 0.05);
   --tw-shadow: var(--tw-shadow-colored);
 }
 

@@ -31,7 +31,7 @@ module.exports = {
       }),
       colors: {
         'background': {
-          DEFAULT: '#111827',
+          DEFAULT: '#0A0F1A',
           'light': '#FFFFFF'
         },
         'primary': {

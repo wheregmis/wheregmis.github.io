@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use document::eval;
 use pulldown_cmark::{html, Parser};
 
 #[derive(Props, PartialEq, Clone)]
@@ -19,16 +20,21 @@ pub fn Markdown(props: MarkdownProps) -> Element {
     rsx! {
         document::Link {
             rel: "stylesheet",
-            href: "https://cdn.jsdelivr.net/npm/star-markdown-css/dist/planet/markdown.min.css",
+            href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css",
         }
-        document::Link {
-            rel: "stylesheet",
-            href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css",
-        }
+
         div {
             id: "{props.id}",
             class: "prose prose-invert max-w-none {props.class}",
             dangerous_inner_html: "{html_buf}",
+            onmounted: move |_| {
+                eval(
+                    r#"
+                                                                                                                            // Initialize highlight.js
+                                                                                                                            hljs.highlightAll();
+                                                                                                                        "#,
+                );
+            },
         }
     }
 }
