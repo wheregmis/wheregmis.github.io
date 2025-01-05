@@ -1,62 +1,63 @@
 use dioxus::prelude::*;
-use dioxus_motion::{
-    animation::Tween,
-    prelude::*,
-    use_transform_motion::{use_transform_animation, Transform},
-};
-use document::eval;
+use dioxus_motion::prelude::*;
 use easer::functions::Easing;
-use svg_attributes::points;
 
 use crate::PROFILE_PIC;
 
 #[component]
 pub fn Profile() -> Element {
-    let mut image_transform = use_transform_animation(
-        Transform {
-            opacity: 0.0,
-            scale: 0.8,
-            rotate: -10.0,
-            ..Default::default()
-        },
-        Transform::default(),
-        AnimationMode::Spring(Spring {
-            stiffness: 100.0,
-            damping: 10.0,
-            mass: 1.0,
-            velocity: 0.0,
-        }),
-    );
+    let mut image_transform = use_motion(Transform::new(-20.0, 0.0, 0.8, 0.0));
 
-    let points_labels: Vec<String> = vec![
-        "Spearheading battery management innovation with Rust".to_string(),
-        "Revolutionizing renewable energy through Rust-powered solutions".to_string(),
-        "Dedicated to driving advancements in battery technology".to_string(),
+    let mut opacity = use_motion(0.0f32);
+    use_effect(move || {
+        image_transform.animate_to(
+            Transform::identity(),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 100.0,
+                damping: 10.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+
+        opacity.animate_to(
+            1.0,
+            AnimationConfig::new(AnimationMode::Tween(Tween {
+                duration: Duration::from_millis(800),
+                easing: easer::functions::Sine::ease_in_out,
+            })),
+        );
+    });
+
+    let points_labels = [
+        "Spearheading battery management innovation with Rust",
+        "Revolutionizing renewable energy through Rust-powered solutions",
+        "Dedicated to driving advancements in battery technology",
     ];
 
-    let point_animations = (0..3).map(|i: usize| {
-        let mut transform = use_transform_animation(
-            Transform {
-                opacity: 0.0,
-                x: -20.0,
-                ..Default::default()
-            },
-            Transform::default(),
-            AnimationMode::Tween(Tween {
-                duration: Duration::from_millis(500 + i as u64 * 400),
-                easing: easer::functions::Cubic::ease_out,
-            }),
-        );
+    let point_animations = (0..3).map(|i| {
+        let mut point_transform = use_motion(Transform::new(-20.0, 0.0, 0.0, 0.0));
+
+        use_effect(move || {
+            let delay = Duration::from_millis(500 + i as u64 * 400);
+            point_transform.animate_to(
+                Transform::identity(),
+                AnimationConfig::new(AnimationMode::Spring(Spring {
+                    stiffness: 100.0,
+                    damping: 15.0,
+                    mass: 1.0,
+                    ..Default::default()
+                }))
+                .with_delay(delay),
+            );
+        });
 
         rsx! {
             p {
                 class: "text-text-muted leading-relaxed flex items-center space-x-2",
-                style: "{transform.style()}",
-                onmounted: move |_| {
-                    transform.start();
-                },
+                style: "opacity: {point_transform.get_value().scale};",
                 span { class: "text-primary", "•" }
-                span { {points_labels[i].clone()} }
+                span { "{points_labels[i]}" }
             }
         }
     });
@@ -116,10 +117,7 @@ pub fn Profile() -> Element {
                         div {
                             id: "profile-image-container",
                             class: "relative overflow-hidden rounded-2xl transition-all duration-500 transform-gpu group-hover:scale-110",
-                            style: "{image_transform.style()}",
-                            onmounted: move |_| {
-                                image_transform.start();
-                            },
+                            style: "transform: translateX({image_transform.get_value().x}px) scale({image_transform.get_value().scale}); opacity: {opacity.get_value()};",
                             // Glow effect with larger blur
                             div { class: "absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/40 to-accent-purple/0 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-2xl" }
                             // Image with separate zoom

@@ -6,15 +6,20 @@ image = "http://rustacean.net/assets/rustacean-flat-happy.png"
 tags = ["rust", "web-dev", "tutorial"]
 +++
 
-# Getting Started with Rust and Dioxus
+# Introduction
+<br>
 
-## Introduction
+![Ferris the Rustacean](http://rustacean.net/assets/rustacean-flat-happy.png)
+
 Building web applications in Rust has never been more exciting. With Dioxus, we get the power of Rust's safety and performance combined with a React-like developer experience.
+<br>
 
 ## Why Rust for Web Development?
-- **Performance**: Lightning-fast runtime performance
-- **Safety**: Memory safety without garbage collection
-- **Modern Tooling**: Rich ecosystem and excellent developer experience
+<br>
+
+* **Performance**: Lightning-fast runtime performance
+* **Safety**: Memory safety without garbage collection
+* **Modern Tooling**: Rich ecosystem and excellent developer experience
 
 ## Code Example
 
@@ -32,4 +37,8 @@ fn App() -> Element {
             }
         }
     }
-}
+} 
+```
+
+![Local Image](/assets/pf.png)
+

@@ -51,19 +51,19 @@ fn Home() -> Element {
             Profile {}
 
             // Work Experience section
-            div { class: "mt-20", WorkExperience {} }
+            div { WorkExperience {} }
 
             // Project Grid
-            div { class: "mt-20", ProjectGrid {} }
+            div { ProjectGrid {} }
 
             // Blog Preview
-            div { class: "mt-20", BlogPreview {} }
+            div { BlogPreview {} }
 
             // Testimonials
-            div { class: "mt-20", Testimonials {} }
+            div { Testimonials {} }
 
             // Footer
-            div { class: "mt-20", Footer {} }
+            div { Footer {} }
         }
     }
 }

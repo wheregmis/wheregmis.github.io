@@ -1077,9 +1077,8 @@ dependencies = [
 
 [[package]]
 name = "dioxus-motion"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3452c0c1412b602310c3d47e04faa3339e7265291b0fda27ec463be187447844"
+version = "0.2.0"
+source = "git+https://github.com/wheregmis/dioxus-motion.git?branch=v0.2.0#6d7853684338c944849012c6a1281e40f6e886e6"
 dependencies = [
  "dioxus-hooks",
  "dioxus-signals",

@@ -561,13 +561,6 @@ video {
   --primary-foreground: 210 40% 98%;
 }
 
-.dark {
-  --background: 224 71% 4%;
-  --foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-}
-
 .container {
   width: 100%;
 }
@@ -736,6 +729,21 @@ video {
   margin-top: auto;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
 .line-clamp-3 {
   overflow: hidden;
   display: -webkit-box;
@@ -775,20 +783,20 @@ video {
   height: 1rem;
 }
 
-.h-48 {
-  height: 12rem;
-}
-
 .h-8 {
   height: 2rem;
+}
+
+.h-\[200px\] {
+  height: 200px;
 }
 
 .h-\[2px\] {
   height: 2px;
 }
 
-.h-\[420px\] {
-  height: 420px;
+.h-\[400px\] {
+  height: 400px;
 }
 
 .h-\[calc\(100\%-2rem\)\] {
@@ -1018,6 +1026,14 @@ video {
   border-color: rgb(55 65 81 / 0.2);
 }
 
+.border-surface-light\/5 {
+  border-color: rgb(55 65 81 / 0.05);
+}
+
+.border-surface-light\/50 {
+  border-color: rgb(55 65 81 / 0.5);
+}
+
 .bg-background {
   --tw-bg-opacity: 1;
   background-color: rgb(10 15 26 / var(--tw-bg-opacity, 1));
@@ -1035,10 +1051,6 @@ video {
 .bg-gray-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
-}
-
-.bg-gray-800\/50 {
-  background-color: rgb(31 41 55 / 0.5);
 }
 
 .bg-gray-900\/50 {
@@ -1068,16 +1080,22 @@ video {
   background-color: transparent;
 }
 
-.bg-gradient-to-b {
-  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
-}
-
 .bg-gradient-to-br {
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
 }
 
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.bg-gradient-to-t {
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+
+.from-black {
+  --tw-gradient-from: #000 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
 .from-blue-400 {
@@ -1089,12 +1107,6 @@ video {
 .from-gray-100 {
   --tw-gradient-from: #f3f4f6 var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(243 244 246 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.from-gray-900 {
-  --tw-gradient-from: #111827 var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(17 24 39 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
@@ -1145,10 +1157,6 @@ video {
   --tw-gradient-to: rgb(192 132 252 / 0) var(--tw-gradient-to-position);
 }
 
-.to-black {
-  --tw-gradient-to: #000 var(--tw-gradient-to-position);
-}
-
 .to-gray-400 {
   --tw-gradient-to: #9ca3af var(--tw-gradient-to-position);
 }
@@ -1185,6 +1193,10 @@ video {
 
 .p-8 {
   padding: 2rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
 }
 
 .px-2 {
@@ -1396,6 +1408,12 @@ video {
   transition-duration: 150ms;
 }
 
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
 .duration-300 {
   transition-duration: 300ms;
 }
@@ -1411,6 +1429,10 @@ video {
 .hover\:border-gray-700:hover {
   --tw-border-opacity: 1;
   border-color: rgb(55 65 81 / var(--tw-border-opacity, 1));
+}
+
+.hover\:border-surface-light\/40:hover {
+  border-color: rgb(55 65 81 / 0.4);
 }
 
 .hover\:bg-gray-900\/70:hover {
@@ -1457,8 +1479,8 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.hover\:shadow-blue-500\/20:hover {
-  --tw-shadow-color: rgb(59 130 246 / 0.2);
+.hover\:shadow-primary\/20:hover {
+  --tw-shadow-color: rgb(187 134 252 / 0.2);
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -1485,6 +1507,11 @@ video {
 .group:hover .group-hover\:text-blue-400 {
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity, 1));
+}
+
+.group:hover .group-hover\:text-primary {
+  --tw-text-opacity: 1;
+  color: rgb(187 134 252 / var(--tw-text-opacity, 1));
 }
 
 .group:hover .group-hover\:text-text-secondary {

@@ -1,14 +1,6 @@
 use dioxus::prelude::*;
-use document::eval;
 
-use dioxus_motion::{
-    animation::Tween,
-    platform::TimeProvider,
-    prelude::*,
-    use_transform_motion::{use_transform_animation, Transform},
-    Time,
-};
-use easer::functions::Easing;
+use dioxus_motion::prelude::*;
 
 #[component]
 pub fn ProjectGrid() -> Element {
@@ -21,7 +13,7 @@ pub fn ProjectGrid() -> Element {
             p { class: "text-gray-400 mb-8",
                 "Some things I've built to make the world a better place"
             }
-            // Project grid
+            // Project grid with fixed card sizes
             div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
                 ProjectCard {
                     title: "Dioxus Motion 🚀",
@@ -32,7 +24,7 @@ pub fn ProjectGrid() -> Element {
                 }
                 ProjectCard {
                     title: "HTML to RSX Converter",
-                    description: "Convert HTML to Dioxus RSX with a single click.",
+                    description: "Convert HTML to Dioxus RSX with a single click. A simple yet powerful tool built with Rust and Dioxus.",
                     image: "https://devpro-aceternity.vercel.app/_next/image?url=%2Fimages%2Fprojects%2Falgochurn.png&w=3840&q=75",
                     tech_stack: vec!["Rust", "Dioxus", "Tailwind"],
                     link: "https://wheregmis.github.io/dioxus_html_rsx/",
@@ -53,62 +45,67 @@ struct ProjectCardProps {
 }
 #[component]
 fn ProjectCard(props: ProjectCardProps) -> Element {
-    let is_visible = use_signal(|| false);
+    let mut card_transform = use_motion(Transform::new(0.0, 20.0, 1.0, 0.0));
+    let mut image_transform = use_motion(Transform::identity());
 
-    let mut card_transform = use_transform_animation(
-        Transform {
-            opacity: 0.0,
-            y: 20.0,
-            ..Default::default()
-        },
-        Transform::default(),
-        AnimationMode::Spring(Spring {
-            stiffness: 100.0,
-            damping: 15.0,
-            mass: 1.0,
-            velocity: 0.0,
-        }),
-    );
+    // Card animation on mount
+    use_effect(move || {
+        card_transform.animate_to(
+            Transform::identity(),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 100.0,
+                damping: 15.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+    });
 
-    let mut image_transform = use_transform_animation(
-        Transform::default(),
-        Transform {
-            scale: 1.1,
-            ..Default::default()
-        },
-        AnimationMode::Spring(Spring {
-            stiffness: 200.0,
-            damping: 20.0,
-            mass: 1.0,
-            velocity: 0.0,
-        }),
-    );
+    // Image hover animation
+    let animate_image_hover = move |_| {
+        image_transform.animate_to(
+            Transform::new(0.0, 0.0, 1.1, 0.0),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 200.0,
+                damping: 20.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+    };
+
+    let animate_image_reset = move |_| {
+        image_transform.animate_to(
+            Transform::identity(),
+            AnimationConfig::new(AnimationMode::Spring(Spring::default())),
+        );
+    };
 
     rsx! {
         a { href: "{props.link}", target: "_blank",
             div {
-                class: "group h-[420px] flex flex-col relative overflow-hidden rounded-xl bg-gray-900/50 border border-gray-800 transition-all duration-300 hover:bg-gray-900/70 hover:border-gray-700 hover:shadow-xl hover:shadow-blue-500/20",
-                style: "{card_transform.style()}",
-                onmounted: move |_| card_transform.start(),
-
+                // Fixed card height
+                class: "group h-[400px] flex flex-col relative overflow-hidden rounded-xl bg-surface/50 border border-surface-light/20 transition-all duration-300 hover:bg-surface-hover hover:border-surface-light/40 hover:shadow-xl hover:shadow-primary/20",
+                style: "transform: translateY({card_transform.get_value().y}px) scale({card_transform.get_value().scale}); opacity: {card_transform.get_value().scale};",
+                // Fixed image height
                 div {
-                    class: "relative h-48 overflow-hidden",
-                    onmouseenter: move |_| image_transform.start(),
-                    onmouseleave: move |_| image_transform.reset(),
-
+                    class: "relative h-[200px] w-full overflow-hidden",
+                    onmouseenter: animate_image_hover,
+                    onmouseleave: animate_image_reset,
                     img {
-                        class: "w-full h-full object-cover",
-                        style: "{image_transform.style()}",
+                        class: "w-full h-full object-cover transition-transform duration-300",
                         src: "{props.image}",
-                        alt: "{props.title}",
+                        style: "transform: scale({image_transform.get_value().scale});",
                     }
                 }
 
-                div { class: "flex flex-col flex-1 p-6",
-                    h3 { class: "text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors",
+                // Content with fixed spacing
+                div { class: "flex flex-col flex-1 p-6 h-[200px]",
+                    h3 { class: "text-lg font-semibold text-text-primary group-hover:text-primary transition-colors line-clamp-1 mb-2",
                         "{props.title}"
                     }
-                    p { class: "text-gray-400 mb-4 line-clamp-3", "{props.description}" }
+                    p { class: "text-sm text-text-secondary line-clamp-3 mb-4", "{props.description}" }
+                    // Tech stack fixed to bottom
                     div { class: "mt-auto flex flex-wrap gap-2",
                         {
                             props
@@ -116,27 +113,27 @@ fn ProjectCard(props: ProjectCardProps) -> Element {
                                 .iter()
                                 .enumerate()
                                 .map(|(index, tech)| {
-                                    let mut tech_transform = use_transform_animation(
-                                        Transform {
-                                            opacity: 0.0,
-                                            y: 10.0,
-                                            ..Default::default()
-                                        },
-                                        Transform::default(),
-                                        AnimationMode::Tween(Tween {
-                                            duration: Duration::from_millis(300),
-                                            easing: easer::functions::Cubic::ease_out,
-                                        }),
-                                    );
+                                    let mut tech_transform = use_motion(Transform::new(0.0, 10.0, 0.0, 0.0));
+                                    use_effect(move || {
+                                        let delay = Duration::from_millis(500 + index as u64 * 100);
+                                        tech_transform
+                                            .animate_to(
+                                                Transform::identity(),
+                                                AnimationConfig::new(
+                                                        AnimationMode::Spring(Spring {
+                                                            stiffness: 100.0,
+                                                            damping: 15.0,
+                                                            mass: 1.0,
+                                                            ..Default::default()
+                                                        }),
+                                                    )
+                                                    .with_delay(delay),
+                                            );
+                                    });
                                     rsx! {
                                         span {
-                                            class: "px-3 py-1 text-xs rounded-full bg-gray-800 text-gray-300",
-                                            style: "{tech_transform.style()}",
-                                            onmounted: move |_| async move {
-                                                let delay = Duration::from_millis((500.0 + (index as f32 * 100.0)) as u64);
-                                                Time::delay(delay).await;
-                                                tech_transform.start();
-                                            },
+                                            class: "px-3 py-1 text-xs rounded-full bg-surface text-text-secondary",
+                                            style: "transform: translateY({tech_transform.get_value().y}px) scale({tech_transform.get_value().scale}); opacity: {tech_transform.get_value().scale};",
                                             "{tech}"
                                         }
                                     }

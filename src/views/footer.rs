@@ -3,10 +3,13 @@ use dioxus::prelude::*;
 #[component]
 pub fn Footer() -> Element {
     rsx! {
-        footer { class: "w-full mt-auto bg-gradient-to-b from-gray-900 to-black border-t border-gray-800",
+        footer { class: "w-full mt-auto bg-gradient-to-t from-black to-bg-background border-t border-surface-light/20",
             div { class: "container mx-auto px-4 py-12",
+                // create a divider for the footer
+                div { class: "border-b border-surface-light/50 mb-12" }
                 div { class: "grid grid-cols-1 md:grid-cols-3 gap-8",
                     // Logo and description
+
                     div { class: "space-y-4",
                         h3 { class: "text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-gray-100 to-gray-400",
                             "Sabin Regmi"
