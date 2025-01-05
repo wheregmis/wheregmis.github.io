@@ -25,14 +25,14 @@ pub fn Markdown(props: MarkdownProps) -> Element {
             /* Base styles */
             .markdown-content {
                 font-size: 1rem;
-                color: var(--text-secondary);
+                color: rgba(255, 255, 255, 0.85);
                 line-height: 1.625;
             }
 
             /* Headings */
             .markdown-content h1, .markdown-content h2, .markdown-content h3,
             .markdown-content h4, .markdown-content h5, .markdown-content h6 {
-                color: var(--text-primary);
+                color: rgba(255, 255, 255, 0.95);
                 font-weight: 600;
                 margin-top: 1.5em;
                 margin-bottom: 0.5em;
@@ -52,23 +52,23 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             /* Links */
             .markdown-content a {
-                color: var(--primary);
+                color: #61afef;
                 text-decoration: none;
                 border-bottom: 1px solid transparent;
                 transition: border-color 0.2s, color 0.2s;
             }
 
             .markdown-content a:hover {
-                color: var(--primary-light);
-                border-bottom-color: var(--primary-light);
+                color: #8cc1f5;
+                border-bottom-color: #8cc1f5;
             }
 
             /* Code blocks */
             .markdown-content pre {
-                background-color: var(--surface);
+                background-color: #1e2127;
                 padding: 1rem;
                 border-radius: 0.75rem;
-                overflow: hidden;
+                overflow: visible; /* Changed from hidden to visible */
                 margin: 1rem 0;
                 position: relative;
                 border: 1px solid rgba(255, 255, 255, 0.1);
@@ -76,6 +76,7 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             .code-block {
                 position: relative;
+                z-index: 1;
             }
 
             .copy-button {
@@ -90,7 +91,7 @@ pub fn Markdown(props: MarkdownProps) -> Element {
                 cursor: pointer;
                 font-size: 0.75rem;
                 transition: all 0.2s;
-                z-index: 10;
+                z-index: 20;
             }
 
             .copy-button:hover {
@@ -99,7 +100,6 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             /* Inline code */
             .markdown-content code {
-                background-color: var(--surface);
                 padding: 0.125rem 0.375rem;
                 border-radius: 0.25rem;
                 font-size: 0.875rem;
@@ -139,10 +139,10 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             /* Blockquotes */
             .markdown-content blockquote {
-                border-left: 4px solid var(--primary);
+                border-left: 4px solid #61afef;
                 padding: 0.5rem 0 0.5rem 1rem;
                 margin: 1rem 0;
-                background-color: rgba(var(--primary-rgb), 0.1);
+                background-color: rgba(97, 175, 239, 0.1);
                 border-radius: 0 0.375rem 0.375rem 0;
             }
 
@@ -162,12 +162,12 @@ pub fn Markdown(props: MarkdownProps) -> Element {
             .markdown-content table th,
             .markdown-content table td {
                 padding: 0.5rem 1rem;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 text-align: left;
             }
 
             .markdown-content table th {
-                background-color: rgba(255, 255, 255, 0.05);
+                background-color: rgba(255, 255, 255, 0.1);
                 font-weight: 600;
             }
 
@@ -184,7 +184,7 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             /* Text Formatting */
             .markdown-content strong {
-                color: var(--text-primary);
+                color: rgba(255, 255, 255, 0.95);
                 font-weight: 600;
             }
 
@@ -194,13 +194,14 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             .markdown-content del {
                 text-decoration: line-through;
-                color: var(--text-muted);
+                color: rgba(255, 255, 255, 0.5);
             }
 
             .markdown-content mark {
-                background-color: rgba(var(--primary-rgb), 0.2);
+                background-color: rgba(97, 175, 239, 0.2);
                 padding: 0.125rem 0.25rem;
                 border-radius: 0.25rem;
+                color: rgba(255, 255, 255, 0.95);
             }
 
             /* Definition Lists */
@@ -210,7 +211,7 @@ pub fn Markdown(props: MarkdownProps) -> Element {
 
             .markdown-content dt {
                 font-weight: 600;
-                color: var(--text-primary);
+                color: rgba(255, 255, 255, 0.95);
                 margin-top: 1rem;
             }
 
@@ -282,7 +283,7 @@ pub fn Markdown(props: MarkdownProps) -> Element {
                 vertical-align: super;
                 line-height: 0;
             }
-        "#.to_string()} }
+            "#.to_string()} }
         document::Link {
             rel: "stylesheet",
             href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css",
@@ -295,6 +296,33 @@ pub fn Markdown(props: MarkdownProps) -> Element {
             onmounted: move |_| {
                 eval(r#"
                     hljs.highlightAll();
+                    
+                    // Add copy function
+                    window.copyCode = function(button) {
+                        const pre = button.parentElement.querySelector('pre');
+                        const code = pre.textContent;
+                        
+                        navigator.clipboard.writeText(code).then(() => {
+                            const originalText = button.textContent;
+                            button.textContent = 'Copied!';
+                            button.style.backgroundColor = 'rgba(46, 160, 67, 0.4)';
+                            
+                            setTimeout(() => {
+                                button.textContent = originalText;
+                                button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('Failed to copy:', err);
+                            button.textContent = 'Error!';
+                            button.style.backgroundColor = 'rgba(248, 81, 73, 0.4)';
+                            
+                            setTimeout(() => {
+                                button.textContent = 'Copy';
+                                button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                            }, 2000);
+                        });
+                    };
+
                     // Initialize copy buttons after syntax highlighting
                     const preElements = document.querySelectorAll('.markdown-content pre');
                     preElements.forEach(pre => {
