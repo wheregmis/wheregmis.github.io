@@ -1,6 +1,8 @@
 use crate::{components::Markdown, Route};
 use dioxus::prelude::*;
-use dioxus_motion::prelude::*; // Add this import
+use dioxus_motion::prelude::*;
+use document::eval;
+// Add this import
 use serde::Deserialize;
 
 use include_dir::{include_dir, Dir};
@@ -158,6 +160,55 @@ pub fn Blog(id: i32) -> Element {
     let has_previous = current_index > 0;
     let has_next = current_index < all_posts.len() - 1;
 
+    let preserve_style_and_copy = move |_| {
+        eval(
+            r#"
+        hljs.highlightAll();
+        
+        // Add copy function
+        window.copyCode = function(button) {
+            const pre = button.parentElement.querySelector('pre');
+            const code = pre.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.backgroundColor = 'rgba(46, 160, 67, 0.4)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                button.textContent = 'Error!';
+                button.style.backgroundColor = 'rgba(248, 81, 73, 0.4)';
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            });
+        };
+
+        // Initialize copy buttons after syntax highlighting
+        const preElements = document.querySelectorAll('.markdown-content pre');
+        preElements.forEach(pre => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block';
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.onclick = function() { copyCode(this); };
+            
+            pre.parentNode.insertBefore(wrapper, pre);
+            wrapper.appendChild(pre);
+            wrapper.appendChild(copyButton);
+        });
+    "#,
+        );
+    };
+
     rsx! {
         div { class: "container mx-auto px-4 py-12 max-w-4xl",
             // Header
@@ -173,7 +224,7 @@ pub fn Blog(id: i32) -> Element {
                 }
             }
             // Content
-            div { class: "prose prose-invert max-w-none container is-fluid",
+            div { class: "prose prose-invert w-full is-fluid",
                 Markdown { content: post.content }
             }
             // Navigation
@@ -184,6 +235,7 @@ pub fn Blog(id: i32) -> Element {
                         rsx! {
                             Link {
                                 to: Route::Blog { id: prev_post.id },
+                                onmounted: preserve_style_and_copy,
                                 class: "flex flex-col items-start text-gray-400 hover:text-white transition-colors group",
                                 span { class: "flex items-center text-sm mb-1",
                                     i { class: "fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform" }
@@ -204,6 +256,7 @@ pub fn Blog(id: i32) -> Element {
                         rsx! {
                             Link {
                                 to: Route::Blog { id: next_post.id },
+                                onmounted: preserve_style_and_copy,
                                 class: "flex flex-col items-end text-gray-400 hover:text-white transition-colors group",
                                 span { class: "flex items-center text-sm mb-1",
                                     "Next"

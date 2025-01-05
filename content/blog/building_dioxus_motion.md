@@ -10,7 +10,6 @@ tags = ["rust", "web-dev", "tutorial"]
 In the evolving landscape of Rust web development, Dioxus has emerged as a powerful framework for building user interfaces. However, one crucial piece was missing: a sophisticated animation system. While JavaScript ecosystems flourish with animation libraries like Framer Motion, the Rust community lacked an equivalent solution. This gap inspired the creation of dioxus-motion, a physics-based animation library that brings fluid, natural-feeling animations to Rust applications.
 
 ## The Journey to dioxus-motion
-
 My journey began when I was using Framer Motion alongside Dioxus. The experience was promising, but the integration felt incomplete. After searching for native Rust alternatives and finding limited options, I decided to build a solution that would feel natural in the Rust ecosystem while maintaining the intuitive API design that makes Framer Motion so popular.
 
 ## Core Design Principles
@@ -41,12 +40,47 @@ position.animate_to(
 );
 ```
 
-## Technical Challenges and Solutions
+## Implementation Deep Dive
 
-### Cross-Platform Considerations
-1. **Timing Mechanisms**: Implementing consistent animation timing across web and native platforms
-2. **State Management**: Integrating seamlessly with Dioxus's reactive system
-3. **Platform Optimization**: Ensuring smooth performance across different browsers and devices
+### Core Animation System
+The animation system was built on three key components:
+
+1. **Motion Hook**: 
+```rust
+pub fn use_motion<T: Animatable>(initial: T) -> Motion<T> {
+    let state = use_signal(|| AnimationState::new(initial));
+    Motion::new(state)
+}
+```
+This hook manages the animation state and provides a clean API for components.
+
+
+
+
+### Challenges & Solutions
+
+1. **Browser Compatibility**
+   - **Challenge**: Different browsers handle requestAnimationFrame differently
+   - **Solution**: Created a platform-agnostic timing system with fallbacks
+
+2. **State Management**
+   - **Challenge**: Keeping animations smooth during React-style rerenders
+   - **Solution**: Implemented a separate animation loop that runs independent of the render cycle
+
+3. **Type System Integration**
+   - **Challenge**: Making animations work with any type while maintaining type safety
+   - **Solution**: Created the `Animatable` trait with safe defaults:
+```rust
+pub trait Animatable: 'static + Copy + Send + Sync {
+    fn zero() -> Self;
+    fn epsilon() -> f32;
+    fn magnitude(&self) -> f32;
+    fn scale(&self, factor: f32) -> Self;
+    fn add(&self, other: &Self) -> Self;
+    fn sub(&self, other: &Self) -> Self;
+    fn interpolate(&self, target: &Self, t: f32) -> Self;
+}
+```
 
 ## Showcase: Advanced Animation Examples
 
@@ -127,6 +161,7 @@ fn AnimatedFlower() -> Element {
    - Implementation of batch animation updates
    - WebAssembly-specific optimizations
    - Advanced caching strategies
+
 2. **API Evolution**
    - Direct DOM style manipulation integration
    - Enhanced gesture support

@@ -8,20 +8,20 @@ tags = ["rust", "web-dev", "tutorial"]
 
 # Markdown Feature Checklist
 
-- [ ] **Headings (h1-h6)**
-- [ ] **Links with hover effect**
-- [ ] **Code blocks with copy button**
-- [ ] **Ordered and unordered lists (nested)**
-- [ ] **Task lists (checkboxes)**
-- [ ] **Blockquotes**
+- [x] **Headings (h1-h6)**
+- [x] **Links with hover effect**
+- [x] **Code blocks with copy button**
+- [x] **Ordered and unordered lists (nested)**
+- [x] **Task lists (checkboxes)**
+- [x] **Blockquotes**
 - [ ] **Tables with alternating row colors**
-- [ ] **Horizontal rules**
-- [ ] **Text formatting (bold, italic, strikethrough, highlighted)**
-- [ ] **Definition lists**
+- [x] **Horizontal rules**
+- [!] **Text formatting (bold, italic, strikethrough, highlighted)** strikethrough and highlighted is not working
+- [x] **Definition lists**
 - [ ] **Abbreviations with hover effect**
-- [ ] **Keyboard shortcuts**
-- [ ] **Subscript and superscript**
-- [ ] **Details/Summary elements**
+- [x] **Keyboard shortcuts**
+- [x] **Subscript and superscript**
+- [x] **Details/Summary elements**
 - [ ] **Footnotes**
 
 ---

@@ -18,7 +18,7 @@ enum Route {
         #[route("/blog/:id")]
         Blog { id: i32 },
 }
-
+pub const MARKDOWN_CSS: Asset = asset!("/assets/markdown.css");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 pub const PROFILE_PIC: Asset = asset!("/assets/pf.png");
 fn main() {
