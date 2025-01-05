@@ -3,7 +3,6 @@
 use components::{NavBar, Profile, ProjectGrid, Testimonials, WorkExperience};
 use dioxus::prelude::*;
 use dioxus_logger::tracing::Level;
-use document::eval;
 
 use views::{Blog, BlogPreview, Footer};
 mod components;
@@ -41,23 +40,54 @@ fn App() -> Element {
     }
 }
 
+pub static PROFILE_ELEMENT: GlobalSignal<
+    Option<dioxus::prelude::Event<dioxus::events::MountedData>>,
+> = Global::new(|| None);
+pub static WORKEXPERIENCE: GlobalSignal<
+    Option<dioxus::prelude::Event<dioxus::events::MountedData>>,
+> = Global::new(|| None);
+pub static PROJECT_GRID: GlobalSignal<Option<dioxus::prelude::Event<dioxus::events::MountedData>>> =
+    Global::new(|| None);
+pub static BLOG_PREVIEW: GlobalSignal<Option<dioxus::prelude::Event<dioxus::events::MountedData>>> =
+    Global::new(|| None);
+
 // Home component - Main landing page container
 #[component]
 fn Home() -> Element {
     rsx! {
-        div { class: "min-h-screen bg-background text-text-primary",
+        div {
+            class: "min-h-screen bg-background text-text-primary",
             // Main container
             // Hero/Profile section
-            Profile {}
+            onmounted: move |data| {
+                *PROFILE_ELEMENT.write() = Some(data);
+            },
+            Profile {
+            }
 
             // Work Experience section
-            div { WorkExperience {} }
+            div {
+                onmounted: move |data| {
+                    *WORKEXPERIENCE.write() = Some(data);
+                },
+                WorkExperience {}
+            }
 
             // Project Grid
-            div { ProjectGrid {} }
+            div {
+                onmounted: move |data| {
+                    *PROJECT_GRID.write() = Some(data);
+                },
+                ProjectGrid {}
+            }
 
             // Blog Preview
-            div { BlogPreview {} }
+            div {
+                onmounted: move |data| {
+                    *BLOG_PREVIEW.write() = Some(data);
+                },
+                BlogPreview {}
+            }
 
             // Testimonials
             div { Testimonials {} }
