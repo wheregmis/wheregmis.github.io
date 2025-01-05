@@ -1,0 +1,55 @@
+/* Reset the base styles first */
+.markdown-content {
+    @apply text-base text-text-secondary;
+}
+
+.markdown-content h1 {
+    @apply text-4xl font-bold text-text-primary mb-6;
+}
+
+.markdown-content h2 {
+    @apply text-3xl font-semibold text-text-primary mt-8 mb-4;
+}
+
+.markdown-content h3 {
+    @apply text-2xl font-medium text-text-secondary mt-6 mb-3;
+}
+
+.markdown-content p {
+    @apply text-text-secondary leading-relaxed mb-4;
+}
+
+.markdown-content pre {
+    @apply bg-surface p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.markdown-content code {
+    @apply bg-surface px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.markdown-content ul {
+    @apply list-disc list-inside text-text-secondary mb-4 space-y-2;
+}
+
+.markdown-content ol {
+    @apply list-decimal list-inside text-text-secondary mb-4 space-y-2;
+}
+
+.markdown-content a {
+    @apply text-primary hover:text-primary-light transition-colors;
+}
+
+.markdown-content blockquote {
+    @apply border-l-4 border-primary/50 pl-4 italic text-text-muted my-4;
+}
+
+/* Add specific styles for inline code */
+.markdown-content p > code,
+.markdown-content li > code {
+    @apply bg-surface px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+/* Ensure proper spacing between elements */
+.markdown-content > * + * {
+    @apply mt-4;
+}
