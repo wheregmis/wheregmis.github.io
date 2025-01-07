@@ -3,7 +3,6 @@
 use components::{NavBar, Profile, ProjectGrid, Testimonials, WorkExperience};
 use dioxus::prelude::*;
 use dioxus_logger::tracing::Level;
-use document::eval;
 
 use views::{Blog, BlogPreview, Footer};
 mod components;
@@ -19,9 +18,12 @@ enum Route {
         #[route("/blog/:id")]
         Blog { id: i32 },
 }
-
+pub const MARKDOWN_CSS: Asset = asset!("/assets/markdown.css");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 pub const PROFILE_PIC: Asset = asset!("/assets/pf.png");
+pub const MOTION_PIC: Asset = asset!("/assets/dioxus-motion.png");
+pub const HTML_RSX_PIC: Asset = asset!("/assets/html-rsx.png");
+
 fn main() {
     dioxus_logger::init(Level::INFO).expect("failed to init logger");
     dioxus::launch(App);
@@ -31,42 +33,73 @@ fn App() -> Element {
     rsx! {
         document::Title { "Sabin Regmi" }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+
         document::Link {
             rel: "stylesheet",
-            href: "https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css"
-        }
-        document::Link {
-            rel: "stylesheet",
-            href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css",
         }
 
         Router::<Route> {}
     }
 }
 
+pub static PROFILE_ELEMENT: GlobalSignal<
+    Option<dioxus::prelude::Event<dioxus::events::MountedData>>,
+> = Global::new(|| None);
+pub static WORKEXPERIENCE: GlobalSignal<
+    Option<dioxus::prelude::Event<dioxus::events::MountedData>>,
+> = Global::new(|| None);
+pub static PROJECT_GRID: GlobalSignal<Option<dioxus::prelude::Event<dioxus::events::MountedData>>> =
+    Global::new(|| None);
+pub static BLOG_PREVIEW: GlobalSignal<Option<dioxus::prelude::Event<dioxus::events::MountedData>>> =
+    Global::new(|| None);
+
 // Home component - Main landing page container
 #[component]
 fn Home() -> Element {
+    let css = MAIN_CSS.to_string();
     rsx! {
-        // Main container div with Tailwind CSS classes for centering and max-width
-        div { class: "container mx-auto",
-            // Profile section - Displays personal/bio information
-            Profile {}
+        div {
 
-            // Work Experience section - Shows professional history
-            WorkExperience {}
+           class: "min-h-screen bg-background text-text-primary",
 
-            // Project Grid - Displays portfolio of projects
-            ProjectGrid {}
+            // Main container
+            // Hero/Profile section
+            onmounted: move |data| {
+                *PROFILE_ELEMENT.write() = Some(data);
+            },
+            Profile {
+            }
 
-            // Blog Preview - Shows recent blog posts
-            BlogPreview {}
+            // Work Experience section
+            div {
+                onmounted: move |data| {
+                    *WORKEXPERIENCE.write() = Some(data);
+                },
+                WorkExperience {}
+            }
 
-            // Testimonials section - Displays client/colleague feedback
-            Testimonials {}
+            // Project Grid
+            div {
+                onmounted: move |data| {
+                    *PROJECT_GRID.write() = Some(data);
+                },
+                ProjectGrid {}
+            }
 
-            // Footer component - Contains contact info and site navigation
-            Footer {}
+            // Blog Preview
+            div {
+                onmounted: move |data| {
+                    *BLOG_PREVIEW.write() = Some(data);
+                },
+                BlogPreview {}
+            }
+
+            // Testimonials
+            div { Testimonials {} }
+
+            // Footer
+            div { Footer {} }
         }
     }
 }

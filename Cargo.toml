@@ -4,17 +4,20 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-
 dioxus = { version = "0.6.1", features = ["router"] }
 dioxus-logger = { version = "0.6.1" }
 pulldown-cmark = "0.12.2"
-serde = { version = "1.0.216", features = ["derive"] }
+serde = { version = "1.0.217", features = ["derive"] }
 toml = "0.8.19"
 include_dir = "0.7.3"
+dioxus-motion = { git = "https://github.com/wheregmis/dioxus-motion.git", branch = "enhanced_motion_dump", default-features = false, optional = true }
+easer = { version = "0.3.0", default-features = false }
 
 [features]
-default = []
-web = ["dioxus/web"]
+default = ["web"]
+web = ["dioxus/web", "dioxus-motion/web"]
+desktop = ["dioxus/desktop", "dioxus-motion/desktop"]
+mobile = ["dioxus/mobile", "dioxus-motion/desktop"]
 
 [profile.rapid]
 inherits = "dev"
@@ -30,3 +33,13 @@ opt-level = "z"    # Optimize for size.
 lto = true         # Enable link-time optimization.
 codegen-units = 32 #Parallelize codegen across 1 cores
 strip = true       # Automatically strip symbols from the binary.
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"

@@ -1,21 +1,159 @@
 use dioxus::prelude::*;
-use document::eval;
+use dioxus_motion::prelude::*;
 
 #[component]
 pub fn WorkExperience() -> Element {
     let mut selected_company = use_signal(|| 0);
 
+    // Timeline dot animation using new API
+    let mut dot_transform = use_motion(Transform::identity());
+
+    // Details panel animation using new API
+    let mut details_transform = use_motion(Transform::identity());
+
+    let mut animate_details = move |_| {
+        details_transform.animate_to(
+            Transform::new(0.0, 0.0, 1.0, 0.0),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 100.0,
+                damping: 15.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+    };
+
     let companies = [
         (
             "TROES Corp",
-            "2021 - Present",
+            "May, 2023 - Present",
             "Software Engineer",
-            "Led development of battery management systems and remote monitoring solutions, resulting in 40% efficiency improvement in data processing.",
+            "Developed high-performance battery management systems and remote monitoring solutions, achieving 40% improvement in data processing efficiency. Built robust battery controllers using Rust, with real-time monitoring through InfluxDB and Grafana. Designed scalable web platforms using Django and Vue.js for seamless IoT energy management.",
             vec![
                 "Rust", "Python", "AWS", "Redis", "Vue", "Tailwind", "Docker", "Grafana", "InfluxDB",
             ]
         ),
+        (
+            "Lambton College",
+            "Aug, 2022 - April, 2023",
+            "Research Assistant",
+            "Focused on developing remote monitoring systems for battery energy storage using Flutter, Vue.js, and Django. Designed and implemented web and mobile applications to track system performance, enabling real-time data access and improving overall monitoring efficiency.",
+            vec![
+                "Python", "AWS", "Vue", "Tailwind", "Docker", "InfluxDB",
+            ]
+        ),
+        (
+            "Seva Development",
+            "Oct, 2021 - Jan, 2022",
+            "Contract Based Software Engineer",
+            "Developed a data migration engine as a Software Engineer, enabling seamless data transfer between diverse sources and destinations, including MySQL, Oracle, PostgreSQL, and Salesforce. Optimized the migration process for accuracy and efficiency, ensuring reliable data handling across multiple platforms.",
+            vec![
+                "Python", "AWS Lambda","PostgreSQL",
+            ]
+        ),
     ];
+
+    let companies_comp = companies.iter().enumerate().map(|(index, (company, duration, _, _, _))| {
+        let mut point_transform = use_motion(Transform::identity());
+
+        let animate_hover = move |_| {
+            point_transform.animate_to(
+                Transform::new(0.0, 0.0, 1.2, 0.0),
+                AnimationConfig::new(AnimationMode::Spring(Spring {
+                    stiffness: 180.0,
+                    damping: 12.0,
+                    mass: 1.0,
+                    ..Default::default()
+                })),
+            );
+        };
+
+        let animate_reset = move |_| {
+            point_transform.animate_to(
+                Transform::identity(),
+                AnimationConfig::new(AnimationMode::Spring(Spring::default())),
+            );
+        };
+
+        rsx! {
+            div {
+                class: "relative cursor-pointer group",
+                onmouseenter: animate_hover,
+                onmouseleave: animate_reset,
+                onclick: move |_| {
+                    selected_company.set(index);
+                    animate_details(());
+                },
+                // Point indicator with transform
+                div {
+                    class: "absolute -left-[25px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2",
+                    class: if selected_company() == index { "bg-blue-500 border-blue-400" } else { "bg-gray-800 border-gray-700" },
+                    style: "transform: scale({point_transform.get_value().scale});",
+                }
+                // Company info
+                div {
+                    class: "p-4 rounded-lg transition-colors duration-300",
+                    class: if selected_company() == index { "bg-surface/50" } else { "bg-transparent" },
+                    h3 { class: "font-medium text-text-primary", "{company}" }
+                    p { class: "text-sm text-text-muted", "{duration}" }
+                }
+            }
+        }
+    });
+
+    let experience_section = {
+        let (_company, duration, title, description, tech_stack) = &companies[selected_company()];
+        rsx! {
+            div { class: "space-y-4",
+                h3 {
+                    class: "text-xl font-semibold text-white",
+                    style: "transform: none",
+                    onmounted: move |_| {},
+                    "{title}"
+                }
+                p { class: "text-gray-400", "{duration}" }
+                p { class: "text-gray-300 leading-relaxed", "{description}" }
+                div { class: "flex flex-wrap gap-2",
+                    {
+                        tech_stack
+                            .iter()
+                            .enumerate()
+                            .map(|(index, tech)| {
+                                let mut tech_transform = use_motion(Transform {
+                                    scale: 0.8,
+                                    y: 10.0,
+                                    x: (index as f32 * 10.0),
+                                    rotation: 0.0,
+                                });
+                                rsx! {
+                                    span {
+                                        class: "px-3 py-1 text-xs rounded-full bg-gray-800 text-gray-300",
+                                        style: "transform: translate({tech_transform.get_value().x}px, {tech_transform.get_value().y}px) scale({tech_transform.get_value().scale}) rotate({tech_transform.get_value().rotation}deg);",
+                                        onmounted: move |_| async move {
+                                            let delay = Duration::from_millis((200.0 + (index as f32 * 100.0)) as u64);
+                                            Time::delay(delay).await;
+                                            tech_transform
+                                                .animate_to(
+                                                    Transform::identity(),
+                                                    AnimationConfig::new(
+                                                        AnimationMode::Spring(Spring {
+                                                            stiffness: 100.0,
+                                                            damping: 15.0,
+                                                            mass: 1.0,
+                                                            velocity: 0.0,
+                                                        }),
+                                                    ),
+                                                );
+                                        },
+                                        "{tech}"
+                                    }
+                                }
+                            })
+                    }
+                }
+            }
+        }
+    };
 
     rsx! {
         div { id: "experience", class: "container mx-auto px-4 py-12",
@@ -26,132 +164,51 @@ pub fn WorkExperience() -> Element {
                 // Timeline line container
                 div {
                     id: "timeline-line",
-                    class: "relative h-[calc(100%-2rem)] bg-gray-800",
+                    class: "relative h-[calc(100%)] bg-gray-800",
                     // Moving dot
                     div {
                         id: "timeline-dot",
-                        class: "absolute w-2 h-2 bg-blue-500 rounded-full -left-[3px] opacity-0",
+                        class: "absolute w-2 h-2 bg-blue-500 rounded-full -left-[3px]",
+                        style: "transform: translateY({dot_transform.get_value().y}px);",
                         onmounted: move |_| {
-                            eval(
-                                r#"
-                                                                                                                                                                                                                    requestAnimationFrame(() => {
-                                                                                                                                                                                                                        const container = document.querySelector('.bg-gray-800');
-                                                                                                                                                                                                                        if (container) {
-                                                                                                                                                                                                                            const height = container.offsetHeight;
-                                                                                                                                                                                                                            Motion.animate('#timeline-dot', {
-                                                                                                                                                                                                                                opacity: [0, 1],
-                                                                                                                                                                                                                                y: [0, height]
-                                                                                                                                                                                                                            }, {
-                                                                                                                                                                                                                                duration: 2,
-                                                                                                                                                                                                                                repeat: Infinity,
-                                                                                                                                                                                                                                easing: "linear",
-                                                                                                                                                                                                                                delay: 0
-                                                                                                                                                                                                                            });
-                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                    });
-                                                                                                                                                                                                                "#,
-                            );
-                        }
+                            dot_transform
+                                .animate_to(
+                                    Transform::new(0.0, 280.0, 1.0, 0.0),
+                                    AnimationConfig::new(
+                                            AnimationMode::Spring(Spring {
+                                                stiffness: 100.0,
+                                                damping: 15.0,
+                                                mass: 1.0,
+                                                velocity: 10.0,
+                                            }),
+                                        )
+                                        .with_loop(LoopMode::Infinite),
+                                );
+                        },
                     }
                 }
                 // Companies list
-                div { class: "space-y-8 pl-4",
-                    for (index , (company , duration , _title , _description , _tech_stack)) in companies.iter().enumerate() {
-                        div {
-                            class: "relative cursor-pointer group",
-                            onclick: move |_| selected_company.set(index),
-                            div {
-                                class: "absolute -left-[25px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transition-colors duration-300",
-                                class: if selected_company() == index {
-                                    "bg-blue-500 border-blue-400"
-                                } else {
-                                    "bg-gray-800 border-gray-700"
-                                }
-                            }
-                            div {
-                                class: "p-4 rounded-lg transition-colors duration-300",
-                                class: if selected_company() == index { "bg-gray-800/50" } else { "bg-transparent" },
-                                h3 { class: "font-medium text-white", "{company}" }
-                                p { class: "text-sm text-gray-400", "{duration}" }
-                            }
-                        }
-                    }
-                }
+                div { class: "space-y-8 pl-4", {companies_comp} }
                 // Experience details section with animations
                 div {
                     id: "experience-details",
                     class: "bg-gray-900/50 rounded-xl p-6 border border-gray-800",
+                    style: "transform: scale({details_transform.get_value().scale});",
                     onmounted: move |_| {
-                        eval(
-                            r#"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const element = document.getElementById('experience-details');
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if (element) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Motion.animate(element, {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    opacity: [0, 1],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    transform: ['translateX(20px)', 'translateX(0)']
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }, {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    duration: 0.5,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    easing: 'ease-out'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "#,
-                        );
+                        details_transform
+                            .animate_to(
+                                Transform::new(0.0, 0.0, 1.0, 0.0),
+                                AnimationConfig::new(
+                                    AnimationMode::Spring(Spring {
+                                        stiffness: 100.0,
+                                        damping: 15.0,
+                                        mass: 1.0,
+                                        velocity: 0.0,
+                                    }),
+                                ),
+                            );
                     },
-                    {
-                        let (company, duration, title, description, tech_stack) = &companies[selected_company()];
-                        rsx! {
-                            div {
-                                class: "space-y-4",
-                                h3 {
-                                    id: "experience-title",
-                                    class: "text-xl font-semibold text-white",
-                                    onmounted: move |_| {
-                                        eval(r#"
-                                            Motion.animate('#experience-title', {
-                                                opacity: [0, 1],
-                                                transform: ['translateY(10px)', 'translateY(0)']
-                                            }, {
-                                                duration: 0.3,
-                                                delay: 0.2
-                                            });
-                                        "#);
-                                    },
-                                    "{title}"
-                                }
-                                p {
-                                    class: "text-gray-400",
-                                    "{duration}"
-                                }
-                                p {
-                                    class: "text-gray-300 leading-relaxed",
-                                    "{description}"
-                                }
-                                div {
-                                    class: "flex flex-wrap gap-2",
-                                    for (index, tech) in tech_stack.iter().enumerate() {
-                                        span {
-                                            id: format!("tech-{}", index),
-                                            class: "px-3 py-1 text-xs rounded-full bg-gray-800 text-gray-300 opacity-0", // Set initial opacity to 0
-                                            onmounted: move |_| {
-                                                eval(&format!(r#"
-                                                    Motion.animate('#tech-{}', {{
-                                                        opacity: [0, 1],
-                                                        transform: ['scale(0.8)', 'scale(1)'],
-                                                        y: [10, 0]
-                                                    }}, {{
-                                                        duration: 0.4,
-                                                        delay: {},
-                                                        easing: "spring(1, 100, 10, 0)"
-                                                    }});
-                                                "#, index, 0.2 + (index as f32 * 0.1)));
-                                            },
-                                            "{tech}"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    {experience_section}
                 }
             }
         }

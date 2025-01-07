@@ -1,95 +1,132 @@
 use dioxus::prelude::*;
-use document::eval;
+use dioxus_motion::{
+    enhanced_motion::{use_motion, AnimationSequence, EnhancedAnimationManager},
+    prelude::*,
+};
+use easer::functions::Easing;
+use std::time::Duration;
 
 use crate::PROFILE_PIC;
 
 #[component]
 pub fn Profile() -> Element {
+    // Main content animations
+    let mut content_transform = use_motion(Transform::new(-20.0, 0.0, 0.8, 0.0));
+    let mut content_opacity = use_motion(0.0f32);
+
+    // Image animations
+    let mut image_transform = use_motion(Transform::new(-20.0, 0.0, 0.8, 0.0));
+    let mut opacity = use_motion(0.0f32);
+
+    // Initial animation sequence on mount
+    use_effect(move || {
+        // Content entrance sequence
+        let content_sequence = AnimationSequence::new().then(
+            Transform::identity(),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 100.0,
+                damping: 10.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+
+        // Image entrance sequence
+        let image_sequence = AnimationSequence::new().then(
+            Transform::identity(),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 100.0,
+                damping: 10.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+
+        content_transform.animate_sequence(content_sequence);
+        image_transform.animate_sequence(image_sequence);
+
+        opacity.animate_to(
+            1.0,
+            AnimationConfig::new(AnimationMode::Tween(Tween {
+                duration: Duration::from_millis(800),
+                easing: easer::functions::Sine::ease_in_out,
+            })),
+        );
+
+        content_opacity.animate_to(
+            1.0,
+            AnimationConfig::new(AnimationMode::Tween(Tween {
+                duration: Duration::from_millis(800),
+                easing: easer::functions::Sine::ease_in_out,
+            })),
+        );
+    });
+
+    let points_labels = [
+        "Spearheading battery management innovation with Rust",
+        "Revolutionizing renewable energy through Rust-powered solutions",
+        "Dedicated to driving advancements in battery technology",
+    ];
+
+    let point_animations = (0..3).map(|i| {
+        let mut point_transform = use_motion(Transform::new(-20.0, 0.0, 0.0, 0.0));
+
+        use_effect(move || {
+            let delay = Duration::from_millis(500 + i as u64 * 400);
+
+            let point_sequence = AnimationSequence::new().then(
+                Transform::identity(),
+                AnimationConfig::new(AnimationMode::Spring(Spring {
+                    stiffness: 100.0,
+                    damping: 15.0,
+                    mass: 1.0,
+                    ..Default::default()
+                }))
+                .with_delay(delay),
+            );
+
+            point_transform.animate_sequence(point_sequence);
+        });
+
+        rsx! {
+            p {
+                class: "text-text-muted leading-relaxed flex items-center space-x-2",
+                style: "opacity: {point_transform.get_value().scale};",
+                span { class: "text-primary", "•" }
+                span { "{points_labels[i]}" }
+            }
+        }
+    });
+
     rsx! {
         div { class: "container mx-auto px-4 pt-20",
-            div { class: "relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 border border-gray-800",
+            div { class: "relative overflow-hidden rounded-xl bg-gradient-to-br from-surface via-surface-dark to-surface p-8 border border-surface-light",
                 // Gradient overlay
-                div { class: "absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10" }
+                div { class: "absolute inset-0 bg-gradient-to-br from-primary/10 via-accent-purple/10 to-secondary/10" }
                 // Content container with flex
                 div { class: "relative z-10 flex items-start justify-between gap-8",
                     // Left content
-                    div { class: "flex-1",
+                    div {
+                        class: "flex-1",
+                        style: "transform: translateX({content_transform.get_value().x}px) scale({content_transform.get_value().scale}); opacity: {content_opacity.get_value()};",
                         // Heading
-                        h1 { class: "text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500",
+                        h1 { class: "text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-light to-accent-purple",
                             "Software Engineer"
                         }
                         // Main description
-                        p { class: "mt-4 text-xl text-gray-300 leading-relaxed",
+                        p { class: "mt-4 text-xl text-text-secondary leading-relaxed",
                             "Pioneering the future of battery technology with Rust-powered solutions."
                         }
-                        // Detailed description
-                        div { class: "mt-6 space-y-2",
-                            p {
-                                id: "point-1",
-                                class: "text-gray-400 leading-relaxed flex items-center space-x-2",
-                                onmounted: move |_| {
-                                    eval(
-                                        r#"
-    Motion.animate('#point-1', {
-        opacity: [0, 1],
-        x: [-20, 0]
-    }, {
-        duration: 0.5,
-        delay: 0.7
-    });
-"#,
-                                    );
-                                },
-                                span { class: "text-primary", "•" }
-                                span { "Spearheading battery management innovation with Rust" }
-                            }
-                            p {
-                                id: "point-2",
-                                class: "text-gray-400 leading-relaxed flex items-center space-x-2",
-                                onmounted: move |_| {
-                                    eval(
-                                        r#"
-    Motion.animate('#point-2', {
-        opacity: [0, 1],
-        x: [-20, 0]
-    }, {
-        duration: 0.5,
-        delay: 0.8
-    });
-"#,
-                                    );
-                                },
-                                span { class: "text-primary", "•" }
-                                span { "Revolutionizing renewable energy through Rust-powered solutions" }
-                            }
-                            p {
-                                id: "point-3",
-                                class: "text-gray-400 leading-relaxed flex items-center space-x-2",
-                                onmounted: move |_| {
-                                    eval(
-                                        r#"
-    Motion.animate('#point-3', {
-        opacity: [0, 1],
-        x: [-20, 0]
-    }, {
-        duration: 0.5,
-        delay: 0.9
-    });
-"#,
-                                    );
-                                },
-                                span { class: "text-primary", "•" }
-                                span { "Dedicated to driving advancements in battery technology" }
-                            }
-                        }
+
+                        div { class: "mt-6 space-y-2", {point_animations} }
                         // Current work
-                        p { class: "mt-4 text-gray-400",
+                        p { class: "mt-4 text-text-muted",
                             "Working with "
-                            span { class: "text-blue-400 hover:text-blue-300 transition-colors",
+                            span { class: "text-primary hover:text-primary-light transition-colors",
                                 "Rust"
                             }
                             " and "
-                            span { class: "text-purple-400 hover:text-purple-300 transition-colors",
+                            span { class: "text-accent-purple hover:text-accent-purple-hover transition-colors",
                                 "Dioxus"
                             }
                             " when I'm not working on my day job."
@@ -97,17 +134,17 @@ pub fn Profile() -> Element {
                         // Social links
                         div { class: "mt-8 flex items-center space-x-4",
                             a {
-                                class: "text-gray-400 hover:text-white transition-colors",
+                                class: "text-text-muted hover:text-text-primary transition-colors",
                                 href: "https://github.com/yourusername",
                                 i { class: "fab fa-github text-xl" }
                             }
                             a {
-                                class: "text-gray-400 hover:text-white transition-colors",
+                                class: "text-text-muted hover:text-text-primary transition-colors",
                                 href: "https://twitter.com/yourusername",
                                 i { class: "fab fa-twitter text-xl" }
                             }
                             a {
-                                class: "text-gray-400 hover:text-white transition-colors",
+                                class: "text-text-muted hover:text-text-primary transition-colors",
                                 href: "https://linkedin.com/in/yourusername",
                                 i { class: "fab fa-linkedin text-xl" }
                             }
@@ -118,31 +155,17 @@ pub fn Profile() -> Element {
                         div {
                             id: "profile-image-container",
                             class: "relative overflow-hidden rounded-2xl transition-all duration-500 transform-gpu group-hover:scale-110",
-                            onmounted: move |_| {
-                                eval(
-                                    r#"
-                                                                Motion.animate('#profile-image-container', {
-                                                                    opacity: [0, 1],
-                                                                    scale: [0.8, 1],
-                                                                    rotate: [-10, 0]
-                                                                }, {
-                                                                    duration: 0.8,
-                                                                    delay: 2,
-                                                                    easing: "spring(1, 100, 10, 0)"
-                                                                });
-                                                            "#,
-                                );
-                            },
+                            style: "transform: translateX({image_transform.get_value().x}px) scale({image_transform.get_value().scale}); opacity: {opacity.get_value()};",
                             // Glow effect with larger blur
                             div { class: "absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/40 to-accent-purple/0 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-2xl" }
                             // Image with separate zoom
                             img {
                                 class: "w-full aspect-square object-cover border-4 border-surface-light/20 transition-all duration-500 group-hover:scale-105 group-hover:border-primary/50",
                                 src: PROFILE_PIC,
-                                alt: "Sabin Regmi"
+                                alt: "Sabin Regmi",
                             }
                             // AI Generated text overlay
-                            div { class: "absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-xs text-white/70 group-hover:text-white/90 transition-colors",
+                            div { class: "absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-surface/50 backdrop-blur-sm text-xs text-text-muted group-hover:text-text-secondary transition-colors",
                                 "Apple Playground AI Generated"
                             }
                         }
