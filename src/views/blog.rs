@@ -1,7 +1,11 @@
 use crate::{components::Markdown, Route};
 use dioxus::prelude::*;
-use dioxus_motion::prelude::*;
+use dioxus_motion::{
+    enhanced_motion::{use_motion, AnimationSequence, EnhancedAnimationManager},
+    prelude::*,
+};
 use document::eval;
+use easer::functions::Easing;
 // Add this import
 use serde::Deserialize;
 
@@ -61,6 +65,7 @@ impl BlogPost {
             .unwrap_or_else(|| panic!("Blog post with id {} not found", id))
     }
 }
+
 #[component]
 pub fn BlogPreview() -> Element {
     let posts = BlogPost::all();
@@ -74,26 +79,36 @@ pub fn BlogPreview() -> Element {
                 for (index , post) in posts.into_iter().enumerate() {
                     {
                         let mut card_transform = use_motion(Transform::new(0.0, 20.0, 0.8, 0.0));
-                        use_effect(move || {
-                            let delay = Duration::from_millis(100 * index as u64);
-                            card_transform
-                                .animate_to(
+                        let mut card_opacity = use_motion(0.0f32);
+                        let on_card_visible = move |_| {
+                            let card_sequence = AnimationSequence::new()
+                                .then(
                                     Transform::identity(),
                                     AnimationConfig::new(
                                             AnimationMode::Spring(Spring {
                                                 stiffness: 100.0,
                                                 damping: 15.0,
                                                 mass: 1.0,
-                                                ..Default::default()
+                                                velocity: 0.0,
                                             }),
                                         )
-                                        .with_delay(delay),
+                                        .with_delay(Duration::from_millis(1300)),
                                 );
-                        });
+                            card_transform.animate_sequence(card_sequence);
+
+                            card_opacity.animate_to(
+                                1.0,
+                                AnimationConfig::new(AnimationMode::Tween(Tween {
+                                    duration: Duration::from_millis(600),
+                                    easing: easer::functions::Sine::ease_in_out,
+                                })),
+                            );
+                        };
                         rsx! {
                             Link { to: Route::Blog { id: post.id },
                                 div {
                                     // Added fixed height and hover glow effect
+                                    onvisible: on_card_visible,
                                     class: "group relative h-[250px] overflow-hidden rounded-xl bg-gray-900/50 border border-gray-800 p-6 transition-all duration-300 hover:bg-gray-900/70 hover:border-gray-700 hover:shadow-xl hover:shadow-primary/20",
                                     style: "transform: translateY({card_transform.get_value().y}px) scale({card_transform.get_value().scale}); opacity: {card_transform.get_value().scale};",
                                     // Glow effect
@@ -164,17 +179,17 @@ pub fn Blog(id: i32) -> Element {
         eval(
             r#"
         hljs.highlightAll();
-        
+
         // Add copy function
         window.copyCode = function(button) {
             const pre = button.parentElement.querySelector('pre');
             const code = pre.textContent;
-            
+
             navigator.clipboard.writeText(code).then(() => {
                 const originalText = button.textContent;
                 button.textContent = 'Copied!';
                 button.style.backgroundColor = 'rgba(46, 160, 67, 0.4)';
-                
+
                 setTimeout(() => {
                     button.textContent = originalText;
                     button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -183,7 +198,7 @@ pub fn Blog(id: i32) -> Element {
                 console.error('Failed to copy:', err);
                 button.textContent = 'Error!';
                 button.style.backgroundColor = 'rgba(248, 81, 73, 0.4)';
-                
+
                 setTimeout(() => {
                     button.textContent = 'Copy';
                     button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -200,7 +215,7 @@ pub fn Blog(id: i32) -> Element {
             copyButton.className = 'copy-button';
             copyButton.textContent = 'Copy';
             copyButton.onclick = function() { copyCode(this); };
-            
+
             pre.parentNode.insertBefore(wrapper, pre);
             wrapper.appendChild(pre);
             wrapper.appendChild(copyButton);

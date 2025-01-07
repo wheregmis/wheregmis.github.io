@@ -1,5 +1,7 @@
 use dioxus::prelude::*;
 
+use crate::{BLOG_PREVIEW, PROFILE_ELEMENT, PROJECT_GRID, WORKEXPERIENCE};
+
 #[component]
 pub fn Footer() -> Element {
     rsx! {
@@ -20,11 +22,31 @@ pub fn Footer() -> Element {
                     div { class: "space-y-4",
                         h4 { class: "text-white font-medium", "Quick Links" }
                         div { class: "flex flex-col space-y-2",
-                            for link in ["About", "Projects", "Blog", "Contact"].iter() {
+                            for link in ["About", "Projects", "Blogs"].iter() {
                                 a {
-                                    class: "text-gray-400 hover:text-white transition-colors",
-                                    href: "#",
+                                    class: "text-sm text-text-secondary hover:text-text-primary transition-colors relative group cursor-pointer",
+                                    onclick: move |_| async move {
+                                        match *link {
+                                            "About" => {
+                                                if let Some(header) = PROFILE_ELEMENT.cloned() {
+                                                    let _ = header.scroll_to(ScrollBehavior::Smooth).await;
+                                                }
+                                            }
+                                            "Projects" => {
+                                                if let Some(header) = PROJECT_GRID.cloned() {
+                                                    let _ = header.scroll_to(ScrollBehavior::Smooth).await;
+                                                }
+                                            }
+                                            "Blogs" => {
+                                                if let Some(header) = BLOG_PREVIEW.cloned() {
+                                                    let _ = header.scroll_to(ScrollBehavior::Smooth).await;
+                                                }
+                                            }
+                                            _ => {}
+                                        }
+                                    },
                                     "{link}"
+
                                 }
                             }
                         }
@@ -53,8 +75,12 @@ pub fn Footer() -> Element {
                 }
                 // Copyright
                 div { class: "mt-12 pt-8 border-t border-gray-800 text-center text-gray-400",
-                    "© 2024 Sabin Regmi. All rights reserved. Thanks to ChatGPT for sucking in RUST"
+                    "© 2024 Sabin Regmi"
+                    div { class: "text-center text-gray-400",
+                        "Built with ❤️ using Dioxus"
+                    }
                 }
+
             }
         }
     }

@@ -1,16 +1,27 @@
 use dioxus::prelude::*;
-use dioxus_motion::prelude::*;
+use dioxus_motion::{
+    enhanced_motion::{use_motion, AnimationSequence, EnhancedAnimationManager},
+    prelude::*,
+};
 use easer::functions::Easing;
+use std::time::Duration;
 
 use crate::PROFILE_PIC;
 
 #[component]
 pub fn Profile() -> Element {
-    let mut image_transform = use_motion(Transform::new(-20.0, 0.0, 0.8, 0.0));
+    // Main content animations
+    let mut content_transform = use_motion(Transform::new(-20.0, 0.0, 0.8, 0.0));
+    let mut content_opacity = use_motion(0.0f32);
 
+    // Image animations
+    let mut image_transform = use_motion(Transform::new(-20.0, 0.0, 0.8, 0.0));
     let mut opacity = use_motion(0.0f32);
+
+    // Initial animation sequence on mount
     use_effect(move || {
-        image_transform.animate_to(
+        // Content entrance sequence
+        let content_sequence = AnimationSequence::new().then(
             Transform::identity(),
             AnimationConfig::new(AnimationMode::Spring(Spring {
                 stiffness: 100.0,
@@ -20,7 +31,29 @@ pub fn Profile() -> Element {
             })),
         );
 
+        // Image entrance sequence
+        let image_sequence = AnimationSequence::new().then(
+            Transform::identity(),
+            AnimationConfig::new(AnimationMode::Spring(Spring {
+                stiffness: 100.0,
+                damping: 10.0,
+                mass: 1.0,
+                ..Default::default()
+            })),
+        );
+
+        content_transform.animate_sequence(content_sequence);
+        image_transform.animate_sequence(image_sequence);
+
         opacity.animate_to(
+            1.0,
+            AnimationConfig::new(AnimationMode::Tween(Tween {
+                duration: Duration::from_millis(800),
+                easing: easer::functions::Sine::ease_in_out,
+            })),
+        );
+
+        content_opacity.animate_to(
             1.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(800),
@@ -40,7 +73,8 @@ pub fn Profile() -> Element {
 
         use_effect(move || {
             let delay = Duration::from_millis(500 + i as u64 * 400);
-            point_transform.animate_to(
+
+            let point_sequence = AnimationSequence::new().then(
                 Transform::identity(),
                 AnimationConfig::new(AnimationMode::Spring(Spring {
                     stiffness: 100.0,
@@ -50,6 +84,8 @@ pub fn Profile() -> Element {
                 }))
                 .with_delay(delay),
             );
+
+            point_transform.animate_sequence(point_sequence);
         });
 
         rsx! {
@@ -70,7 +106,9 @@ pub fn Profile() -> Element {
                 // Content container with flex
                 div { class: "relative z-10 flex items-start justify-between gap-8",
                     // Left content
-                    div { class: "flex-1",
+                    div {
+                        class: "flex-1",
+                        style: "transform: translateX({content_transform.get_value().x}px) scale({content_transform.get_value().scale}); opacity: {content_opacity.get_value()};",
                         // Heading
                         h1 { class: "text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-light to-accent-purple",
                             "Software Engineer"

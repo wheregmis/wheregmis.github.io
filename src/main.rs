@@ -21,6 +21,9 @@ enum Route {
 pub const MARKDOWN_CSS: Asset = asset!("/assets/markdown.css");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 pub const PROFILE_PIC: Asset = asset!("/assets/pf.png");
+pub const MOTION_PIC: Asset = asset!("/assets/dioxus-motion.png");
+pub const HTML_RSX_PIC: Asset = asset!("/assets/html-rsx.png");
+
 fn main() {
     dioxus_logger::init(Level::INFO).expect("failed to init logger");
     dioxus::launch(App);
@@ -54,9 +57,12 @@ pub static BLOG_PREVIEW: GlobalSignal<Option<dioxus::prelude::Event<dioxus::even
 // Home component - Main landing page container
 #[component]
 fn Home() -> Element {
+    let css = MAIN_CSS.to_string();
     rsx! {
         div {
-            class: "min-h-screen bg-background text-text-primary",
+
+           class: "min-h-screen bg-background text-text-primary",
+
             // Main container
             // Hero/Profile section
             onmounted: move |data| {
