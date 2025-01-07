@@ -5,7 +5,6 @@ use dioxus_motion::{
     prelude::*,
 };
 use document::eval;
-use easer::functions::Easing;
 // Add this import
 use serde::Deserialize;
 
@@ -95,14 +94,6 @@ pub fn BlogPreview() -> Element {
                                         .with_delay(Duration::from_millis(1300)),
                                 );
                             card_transform.animate_sequence(card_sequence);
-
-                            card_opacity.animate_to(
-                                1.0,
-                                AnimationConfig::new(AnimationMode::Tween(Tween {
-                                    duration: Duration::from_millis(600),
-                                    easing: easer::functions::Sine::ease_in_out,
-                                })),
-                            );
                         };
                         rsx! {
                             Link { to: Route::Blog { id: post.id },
@@ -179,17 +170,17 @@ pub fn Blog(id: i32) -> Element {
         eval(
             r#"
         hljs.highlightAll();
-
+        
         // Add copy function
         window.copyCode = function(button) {
             const pre = button.parentElement.querySelector('pre');
             const code = pre.textContent;
-
+            
             navigator.clipboard.writeText(code).then(() => {
                 const originalText = button.textContent;
                 button.textContent = 'Copied!';
                 button.style.backgroundColor = 'rgba(46, 160, 67, 0.4)';
-
+                
                 setTimeout(() => {
                     button.textContent = originalText;
                     button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -198,7 +189,7 @@ pub fn Blog(id: i32) -> Element {
                 console.error('Failed to copy:', err);
                 button.textContent = 'Error!';
                 button.style.backgroundColor = 'rgba(248, 81, 73, 0.4)';
-
+                
                 setTimeout(() => {
                     button.textContent = 'Copy';
                     button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -215,7 +206,7 @@ pub fn Blog(id: i32) -> Element {
             copyButton.className = 'copy-button';
             copyButton.textContent = 'Copy';
             copyButton.onclick = function() { copyCode(this); };
-
+            
             pre.parentNode.insertBefore(wrapper, pre);
             wrapper.appendChild(pre);
             wrapper.appendChild(copyButton);

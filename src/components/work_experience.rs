@@ -26,29 +26,20 @@ pub fn WorkExperience() -> Element {
     let companies = [
         (
             "TROES Corp",
-            "May, 2023 - Present",
+            "2021 - Present",
             "Software Engineer",
-            "Developed high-performance battery management systems and remote monitoring solutions, achieving 40% improvement in data processing efficiency. Built robust battery controllers using Rust, with real-time monitoring through InfluxDB and Grafana. Designed scalable web platforms using Django and Vue.js for seamless IoT energy management.",
+            "Led development of battery management systems and remote monitoring solutions, resulting in 40% efficiency improvement in data processing.",
             vec![
                 "Rust", "Python", "AWS", "Redis", "Vue", "Tailwind", "Docker", "Grafana", "InfluxDB",
             ]
         ),
         (
             "Lambton College",
-            "Aug, 2022 - April, 2023",
+            "2021 - Present",
             "Research Assistant",
-            "Focused on developing remote monitoring systems for battery energy storage using Flutter, Vue.js, and Django. Designed and implemented web and mobile applications to track system performance, enabling real-time data access and improving overall monitoring efficiency.",
+            "Led development of battery management systems and remote monitoring solutions, resulting in 40% efficiency improvement in data processing.",
             vec![
-                "Python", "AWS", "Vue", "Tailwind", "Docker", "InfluxDB",
-            ]
-        ),
-        (
-            "Seva Development",
-            "Oct, 2021 - Jan, 2022",
-            "Contract Based Software Engineer",
-            "Developed a data migration engine as a Software Engineer, enabling seamless data transfer between diverse sources and destinations, including MySQL, Oracle, PostgreSQL, and Salesforce. Optimized the migration process for accuracy and efficiency, ensuring reliable data handling across multiple platforms.",
-            vec![
-                "Python", "AWS Lambda","PostgreSQL",
+                "Rust", "Python", "AWS", "Redis", "Vue", "Tailwind", "Docker", "Grafana", "InfluxDB",
             ]
         ),
     ];
@@ -164,7 +155,7 @@ pub fn WorkExperience() -> Element {
                 // Timeline line container
                 div {
                     id: "timeline-line",
-                    class: "relative h-[calc(100%)] bg-gray-800",
+                    class: "relative h-[calc(100%-2rem)] bg-gray-800",
                     // Moving dot
                     div {
                         id: "timeline-dot",
@@ -173,7 +164,7 @@ pub fn WorkExperience() -> Element {
                         onmounted: move |_| {
                             dot_transform
                                 .animate_to(
-                                    Transform::new(0.0, 280.0, 1.0, 0.0),
+                                    Transform::new(0.0, 200.0, 1.0, 0.0),
                                     AnimationConfig::new(
                                             AnimationMode::Spring(Spring {
                                                 stiffness: 100.0,

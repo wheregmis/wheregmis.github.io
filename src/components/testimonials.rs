@@ -1,6 +1,9 @@
 use dioxus::hooks::*;
 use dioxus::prelude::*;
-use dioxus_motion::{enhanced_motion::use_motion, prelude::*};
+use dioxus_motion::{
+    enhanced_motion::{use_motion, AnimationSequence, EnhancedAnimationManager},
+    prelude::*,
+};
 use easer::functions::Easing;
 use std::time::Duration;
 
@@ -23,14 +26,15 @@ pub fn Testimonials() -> Element {
             role: "I Myself".into(),
             company: "My Own World".into(),
             avatar: PROFILE_PIC.to_string(),
-            quote: "I am fucking awesome and i know it, Before someput put testimonials i need to judge myself".into(),
+            quote: "I am fucking awesome and i know it, and i dont need someone else to judge me"
+                .into(),
         },
         TestimonialProps {
             name: "Kshitiz Bhattarai".into(),
             role: "My Friend".into(),
             company: "My Badass COmpany".into(),
             avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg".into(),
-            quote: "Sabin is the coolest dev i ever know".into(),
+            quote: "Sabin is the coolest dev i have ever known".into(),
         },
     ];
 
