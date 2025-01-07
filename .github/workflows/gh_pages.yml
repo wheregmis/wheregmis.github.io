@@ -22,7 +22,7 @@ jobs:
         run: cargo binstall -y dioxus-cli@0.6.1 --locked
       - uses: actions/checkout@v2
       - name: Build
-        run:  dx build --release --platform web
+        run:  dx bundle --release --platform web
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.3
         with:

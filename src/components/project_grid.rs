@@ -6,8 +6,6 @@ use dioxus_motion::{
 use easer::functions::Easing;
 use std::time::Duration;
 
-use crate::{HTML_RSX_PIC, MOTION_PIC};
-
 #[component]
 pub fn ProjectGrid() -> Element {
     rsx! {
@@ -24,14 +22,14 @@ pub fn ProjectGrid() -> Element {
                 ProjectCard {
                     title: "Dioxus Motion 🚀",
                     description: "A lightweight, cross-platform animation library for Dioxus, designed to bring smooth, flexible animations to your Rust web, desktop, and mobile applications.",
-                    image: MOTION_PIC.to_string(),
+                    image: "https://devpro-aceternity.vercel.app/_next/image?url=%2Fimages%2Fprojects%2Falgochurn.png&w=3840&q=75",
                     tech_stack: vec!["Rust", "Dioxus", "Tailwind"],
                     link: "https://crates.io/crates/dioxus-motion",
                 }
                 ProjectCard {
                     title: "HTML to RSX Converter",
                     description: "Convert HTML to Dioxus RSX with a single click. A simple yet powerful tool built with Rust and Dioxus.",
-                    image: HTML_RSX_PIC.to_string(),
+                    image: "https://devpro-aceternity.vercel.app/_next/image?url=%2Fimages%2Fprojects%2Falgochurn.png&w=3840&q=75",
                     tech_stack: vec!["Rust", "Dioxus", "Tailwind"],
                     link: "https://wheregmis.github.io/dioxus_html_rsx/",
                 }
