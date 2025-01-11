@@ -21,8 +21,8 @@ pub fn Profile() -> Element {
         let content_sequence = AnimationSequence::new().then(
             Transform::identity(),
             AnimationConfig::new(AnimationMode::Spring(Spring {
-                stiffness: 100.0,
-                damping: 10.0,
+                stiffness: 180.0,
+                damping: 12.0,
                 mass: 1.0,
                 ..Default::default()
             })),
@@ -32,8 +32,8 @@ pub fn Profile() -> Element {
         let image_sequence = AnimationSequence::new().then(
             Transform::identity(),
             AnimationConfig::new(AnimationMode::Spring(Spring {
-                stiffness: 100.0,
-                damping: 10.0,
+                stiffness: 180.0,
+                damping: 12.0,
                 mass: 1.0,
                 ..Default::default()
             })),
@@ -45,7 +45,7 @@ pub fn Profile() -> Element {
         opacity.animate_to(
             1.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
-                duration: Duration::from_millis(800),
+                duration: Duration::from_millis(200),
                 easing: easer::functions::Sine::ease_in_out,
             })),
         );
@@ -53,7 +53,7 @@ pub fn Profile() -> Element {
         content_opacity.animate_to(
             1.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
-                duration: Duration::from_millis(800),
+                duration: Duration::from_millis(200),
                 easing: easer::functions::Sine::ease_in_out,
             })),
         );
@@ -66,13 +66,13 @@ pub fn Profile() -> Element {
     ];
 
     let point_animations = (0..3).map(|i| {
-        let mut point_transform = use_motion(Transform::new(-20.0, 0.0, 0.0, 0.0));
+        let mut opacity = use_motion(0.0f32);
 
         use_effect(move || {
-            let delay = Duration::from_millis(500 + i as u64 * 400);
+            let delay = Duration::from_millis(100 + i as u64 * 100);
 
-            let point_sequence = AnimationSequence::new().then(
-                Transform::identity(),
+            opacity.animate_to(
+                1.0,
                 AnimationConfig::new(AnimationMode::Spring(Spring {
                     stiffness: 100.0,
                     damping: 15.0,
@@ -81,14 +81,12 @@ pub fn Profile() -> Element {
                 }))
                 .with_delay(delay),
             );
-
-            point_transform.animate_sequence(point_sequence);
         });
 
         rsx! {
             p {
                 class: "text-text-muted leading-relaxed flex items-center space-x-2",
-                style: "opacity: {point_transform.get_value().scale};",
+                style: "opacity: {opacity.get_value()};",
                 span { class: "text-primary", "•" }
                 span { "{points_labels[i]}" }
             }
