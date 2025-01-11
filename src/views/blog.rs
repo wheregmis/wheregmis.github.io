@@ -1,9 +1,6 @@
 use crate::{components::Markdown, Route};
 use dioxus::prelude::*;
-use dioxus_motion::{
-    enhanced_motion::{use_motion, AnimationSequence, EnhancedAnimationManager},
-    prelude::*,
-};
+use dioxus_motion::prelude::*;
 use document::eval;
 // Add this import
 use serde::Deserialize;

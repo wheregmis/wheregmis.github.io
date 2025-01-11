@@ -10,7 +10,7 @@ pulldown-cmark = "0.12.2"
 serde = { version = "1.0.217", features = ["derive"] }
 toml = "0.8.19"
 include_dir = "0.7.3"
-dioxus-motion = { git = "https://github.com/wheregmis/dioxus-motion.git", branch = "enhanced_motion_dump", default-features = false, optional = true }
+dioxus-motion = { version = "0.2.1", default-features = false, optional = true }
 easer = { version = "0.3.0", default-features = false }
 
 [features]
