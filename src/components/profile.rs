@@ -32,10 +32,10 @@ pub fn Profile() -> Element {
         let image_sequence = AnimationSequence::new().then(
             Transform::identity(),
             AnimationConfig::new(AnimationMode::Spring(Spring {
-                stiffness: 180.0,
+                stiffness: 80.0,
                 damping: 12.0,
-                mass: 1.0,
-                ..Default::default()
+                mass: 8.0,
+                velocity: 10.0,
             })),
         );
 
@@ -45,7 +45,7 @@ pub fn Profile() -> Element {
         opacity.animate_to(
             1.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
-                duration: Duration::from_millis(200),
+                duration: Duration::from_millis(100),
                 easing: easer::functions::Sine::ease_in_out,
             })),
         );
@@ -149,7 +149,7 @@ pub fn Profile() -> Element {
                     div { class: "w-[25%] flex-shrink-0 group -ml-48",
                         div {
                             id: "profile-image-container",
-                            class: "relative overflow-hidden rounded-2xl transition-all duration-500 transform-gpu group-hover:scale-110",
+                            class: "relative overflow-hidden rounded-2xl transition-all duration-200 transform-gpu group-hover:scale-110",
                             style: "transform: translateX({image_transform.get_value().x}px) scale({image_transform.get_value().scale}); opacity: {opacity.get_value()};",
                             // Glow effect with larger blur
                             div { class: "absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/40 to-accent-purple/0 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-2xl" }
