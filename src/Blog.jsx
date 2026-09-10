@@ -11,8 +11,10 @@ function CodeBlock({ children }) {
     try {
       await navigator.clipboard.writeText(code.current.textContent);
       setStatus('Copied');
+      setTimeout(() => setStatus('Copy code'), 2000);
     } catch {
       setStatus('Select code to copy');
+      setTimeout(() => setStatus('Copy code'), 2000);
     }
   }
   return <div className="article-code"><div className="code-toolbar"><span>CODE</span><button onClick={copy} aria-live="polite">{status}</button></div><pre ref={code} tabIndex={0}>{children}</pre></div>;
@@ -22,6 +24,7 @@ const markdownComponents = { pre: CodeBlock, h1: ({ children }) => <h2>{children
 
 export default function Blog({ slug, anchor }) {
   const [contents, setContents] = useState([]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const post = posts.find(post => post.slug === slug);
   useEffect(() => {
     document.title = `${post ? post.title : 'Article not found'} — Sabin Regmi`;
@@ -30,6 +33,14 @@ export default function Blog({ slug, anchor }) {
     return () => { document.title = 'Sabin Regmi — Software Engineer'; };
   }, [post]);
   useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 350);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  useEffect(() => {
     const headings = [...document.querySelectorAll('.article-body h2')];
     setContents(headings.map((heading, index) => {
       heading.id = `section-${index}`;
@@ -37,11 +48,20 @@ export default function Blog({ slug, anchor }) {
     }));
   }, [slug]);
   useEffect(() => {
-    if (anchor) document.getElementById(anchor)?.scrollIntoView({ behavior: 'instant' });
+    if (anchor) {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.getElementById(anchor)?.scrollIntoView({ behavior: reduced ? 'instant' : 'smooth', block: 'start' });
+    }
   }, [anchor, contents]);
+
+  const scrollToTop = () => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduced ? 'instant' : 'smooth' });
+  };
+
   return <>
     <a className="skip-link" href="#article-body" onClick={event => { event.preventDefault(); document.getElementById('article-body')?.focus(); }}>Skip to article</a>
-    <header className="header wrap"><a className="wordmark" href="#home">sabin regmi<span>®</span></a><a className="text-link" href="#writing">← Back to all writing</a></header>
+    <header className="header wrap"><a className="wordmark" href="#home" aria-label="Sabin Regmi"><span className="sr-only">sabin regmi</span><span aria-hidden="true">sab<span className="starred-i">ı<span className="star-tittle">*</span></span>n regm<span className="starred-i">ı<span className="star-tittle">*</span></span></span></a><a className="text-link" href="#writing">← Back to all writing</a></header>
     <main className="article wrap" id="main">
       {post ? <article>
         <header className="article-heading"><p className="eyebrow">NOTES FROM THE WORKBENCH / <time dateTime={post.isoDate}>{post.date}</time></p><h1 id="article-title" tabIndex={-1}>{post.title}</h1><p className="article-subtitle serif">{post.subtitle}</p><p className="article-byline">Written by Sabin Regmi · {post.readingMinutes} min read</p><div className="tags">{post.tags.map(tag => <span key={tag}>{tag}</span>)}</div></header>
@@ -50,5 +70,15 @@ export default function Blog({ slug, anchor }) {
         <footer className="article-footer"><a className="text-link" href="#writing">← Back to all writing</a><a className="text-link" href={post.projectUrl}>Explore {post.projectName} ↗</a></footer>
       </article> : <><h1 id="article-title" tabIndex={-1}>Article not found.</h1><p>This article isn’t available. <a href="#writing">Return to the writing section.</a></p></>}
     </main>
+    {showScrollTop && (
+      <button
+        className="floating-top-button"
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+        title="Scroll to top"
+      >
+        <span aria-hidden="true">↑</span>
+      </button>
+    )}
   </>;
 }

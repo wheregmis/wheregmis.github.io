@@ -51,11 +51,28 @@ export default function Sculpture({ paused, stage }) {
     scene.add(new THREE.Line(cableGeometry, cableMaterial));
     const signals = [0,1,2].map(() => box(0,-0.39,1.15,0.1,0.1,0.1,orange));
     let phase = 0, previousTime, visible = true;
+    const baseColor = new THREE.Color('#9ca98d');
+    const activeColor = new THREE.Color('#f07943');
     const render = (time) => {
       if (time !== undefined && previousTime !== undefined) phase += Math.min(time - previousTime, 50) * 0.00016;
       previousTime = time;
       signals.forEach((signal, i) => { signal.position.x = -2.3 + ((phase + i / 3) % 1) * 4.6; });
-      materials.forEach((material, i) => material.color.set(i === state.current.stage ? '#f07943' : '#9ca98d'));
+      materials.forEach((material, i) => {
+        const target = i === state.current.stage ? activeColor : baseColor;
+        if (state.current.reduced || state.current.paused) {
+          material.color.copy(target);
+        } else {
+          material.color.lerp(target, 0.09);
+        }
+      });
+      if (!state.current.reduced && !state.current.paused && time !== undefined) {
+        const targetCamX = (state.current.stage - 1) * 0.3 + Math.sin(time * 0.0005) * 0.18;
+        const targetCamY = 4.5 + Math.cos(time * 0.0007) * 0.1;
+        camera.position.x += (targetCamX - camera.position.x) * 0.04;
+        camera.position.y += (targetCamY - camera.position.y) * 0.04;
+        camera.lookAt(0, 0, 0);
+        orange.emissiveIntensity = 0.3 + Math.sin(time * 0.004) * 0.12;
+      }
       renderer.render(scene, camera);
     };
     const resize = () => {
