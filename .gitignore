@@ -1,3 +1,4 @@
-/target
-/dist
-.cargo
+node_modules/
+dist/
+.DS_Store
+.tokensave/

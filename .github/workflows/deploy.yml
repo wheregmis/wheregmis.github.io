@@ -1,0 +1,27 @@
+name: Deploy portfolio
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: portfolio-pages
+  cancel-in-progress: true
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          target-folder: docs
