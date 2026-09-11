@@ -1,4 +1,39 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="theme-color" content="#f5f3ee" /><meta name="description" content="Sabin Regmi — software engineer building thoughtful interfaces, Rust tools, and renewable energy systems." /><title>Sabin Regmi — Software Engineer</title><link rel="icon" href="/favicon.svg" type="image/svg+xml" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />  <script type="module" crossorigin src="/assets/index-yqRuOpV4.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BC11A2QZ.css">
-</head><body><div id="root"></div><noscript>This portfolio requires JavaScript. Find Sabin's work at github.com/wheregmis.</noscript></body></html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f5f3ed" />
+    <meta name="description" content="Sabin Regmi — software engineer building thoughtful interfaces, Rust tools, and renewable energy systems." />
+    <title>Sabin Regmi — Software Engineer</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored ? stored : (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            var metaTheme = document.querySelector('meta[name="theme-color"]');
+            if (metaTheme) metaTheme.setAttribute('content', '#141815');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            var metaTheme = document.querySelector('meta[name="theme-color"]');
+            if (metaTheme) metaTheme.setAttribute('content', '#f5f3ed');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-DxZHu7T7.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-zJ9XUDqQ.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>This portfolio requires JavaScript. Find Sabin's work at github.com/wheregmis.</noscript>
+  </body>
+</html>
