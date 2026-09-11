@@ -160,7 +160,8 @@ export function TracingBeam({ children, className = '' }) {
           <path
             d={`M 10 0 V ${svgHeight}`}
             fill="none"
-            stroke="#d4d8cc"
+            stroke="currentColor"
+            className="tracing-beam-bg-path"
             strokeWidth="1.5"
             strokeDasharray="4 4"
           />

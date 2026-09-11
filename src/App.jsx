@@ -4,6 +4,7 @@ import { projects, experience, systemStages, caseStudies } from './data';
 import { posts } from './blog-data.js';
 import Playground from './Playground';
 import { FlipWords, CardSpotlight, TracingBeam, TiltCard } from './AceternityUI';
+import ThemeToggle from './ThemeToggle';
 
 const Sculpture = lazy(() => import('./Sculpture'));
 const Arrow = () => <span aria-hidden="true">↗</span>;
@@ -103,7 +104,10 @@ export default function App() {
             </a>
           ))}
         </nav>
-        <a className="contact-link" href="#contact" onClick={e => handleNavClick(e, 'contact')}>Let’s talk <Arrow /></a>
+        <div className="header-actions">
+          <ThemeToggle />
+          <a className="contact-link" href="#contact" onClick={e => handleNavClick(e, 'contact')}>Let’s talk <Arrow /></a>
+        </div>
       </header>
     </div>
     <main id="main">

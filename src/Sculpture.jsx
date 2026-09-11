@@ -24,10 +24,18 @@ export default function Sculpture({ paused, stage }) {
     const light = new THREE.DirectionalLight('#ffffff', 4);
     light.position.set(-3, 6, 5);
     scene.add(light);
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const materials = [0, 1, 2].map(() => new THREE.MeshStandardMaterial({ color: '#9ca98d', roughness: 0.45, metalness: 0.2 }));
-    const dark = new THREE.MeshStandardMaterial({ color: '#293b31', roughness: 0.6 });
+    const isThemeDark = () => {
+      if (typeof document === 'undefined') return false;
+      const attr = document.documentElement.getAttribute('data-theme');
+      if (attr === 'dark') return true;
+      if (attr === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+    const initialDark = isThemeDark();
+    const materials = [0, 1, 2].map(() => new THREE.MeshStandardMaterial({ color: initialDark ? '#a8b89e' : '#9ca98d', roughness: 0.45, metalness: 0.2 }));
+    const dark = new THREE.MeshStandardMaterial({ color: initialDark ? '#384d3e' : '#293b31', roughness: 0.6 });
     const orange = new THREE.MeshStandardMaterial({ color: '#f47b46', emissive: '#b43c12', emissiveIntensity: 0.3 });
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
     const box = (x, y, z, w, h, d, material) => {
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(x, y, z); mesh.scale.set(w, h, d); scene.add(mesh);
@@ -87,10 +95,21 @@ export default function Sculpture({ paused, stage }) {
     update.current = sync;
     const observer = new ResizeObserver(resize); observer.observe(element);
     const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }); visibility.observe(element);
-    document.addEventListener('visibilitychange', sync);
+    const handleTheme = () => {
+      const darkActive = isThemeDark();
+      baseColor.set(darkActive ? '#a8b89e' : '#9ca98d');
+      dark.color.set(darkActive ? '#384d3e' : '#293b31');
+      cableMaterial.color.set(darkActive ? '#7a8c75' : '#899681');
+      sync();
+    };
+    window.addEventListener('themechange', handleTheme);
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', handleTheme);
     resize(); sync();
     return () => {
       observer.disconnect(); visibility.disconnect(); document.removeEventListener('visibilitychange', sync);
+      window.removeEventListener('themechange', handleTheme);
+      mq.removeEventListener('change', handleTheme);
       renderer.setAnimationLoop(null); geometry.dispose(); cableGeometry.dispose(); cableMaterial.dispose();
       [...materials, dark, orange].forEach(material => material.dispose());
       renderer.dispose(); renderer.domElement.remove(); update.current = () => {};

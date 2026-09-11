@@ -3,6 +3,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 const sources = import.meta.glob('./content/blog/*.md', { query: '?raw', import: 'default', eager: true });
 import { posts, markdownBody } from './blog-data.js';
+import ThemeToggle from './ThemeToggle';
 
 function CodeBlock({ children }) {
   const code = useRef(null);
@@ -61,7 +62,7 @@ export default function Blog({ slug, anchor }) {
 
   return <>
     <a className="skip-link" href="#article-body" onClick={event => { event.preventDefault(); document.getElementById('article-body')?.focus(); }}>Skip to article</a>
-    <header className="header wrap"><a className="wordmark" href="#home" aria-label="Sabin Regmi"><span className="sr-only">sabin regmi</span><span aria-hidden="true">sab<span className="starred-i">ı<span className="star-tittle">*</span></span>n regm<span className="starred-i">ı<span className="star-tittle">*</span></span></span></a><a className="text-link" href="#writing">← Back to all writing</a></header>
+    <header className="header wrap"><a className="wordmark" href="#home" aria-label="Sabin Regmi"><span className="sr-only">sabin regmi</span><span aria-hidden="true">sab<span className="starred-i">ı<span className="star-tittle">*</span></span>n regm<span className="starred-i">ı<span className="star-tittle">*</span></span></span></a><div className="header-actions"><ThemeToggle /><a className="text-link" href="#writing">← Back to all writing</a></div></header>
     <main className="article wrap" id="main">
       {post ? <article>
         <header className="article-heading"><p className="eyebrow">NOTES FROM THE WORKBENCH / <time dateTime={post.isoDate}>{post.date}</time></p><h1 id="article-title" tabIndex={-1}>{post.title}</h1><p className="article-subtitle serif">{post.subtitle}</p><p className="article-byline">Written by Sabin Regmi · {post.readingMinutes} min read</p><div className="tags">{post.tags.map(tag => <span key={tag}>{tag}</span>)}</div></header>
