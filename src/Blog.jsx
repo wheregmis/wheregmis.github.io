@@ -49,10 +49,17 @@ export default function Blog({ slug, anchor }) {
     }));
   }, [slug]);
   useEffect(() => {
-    if (anchor) {
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      document.getElementById(anchor)?.scrollIntoView({ behavior: reduced ? 'instant' : 'smooth', block: 'start' });
-    }
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior = reduced ? 'instant' : 'smooth';
+    const frame = window.requestAnimationFrame(() => {
+      if (anchor) {
+        document.getElementById(anchor)?.scrollIntoView({ behavior, block: 'start' });
+      } else {
+        // Back from a contents link should restore the article's base route.
+        window.scrollTo({ top: 0, behavior });
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [anchor, contents]);
 
   const scrollToTop = () => {

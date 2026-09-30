@@ -1,13 +1,14 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { m, LazyMotion, domAnimation, MotionConfig, useReducedMotion, useScroll, AnimatePresence } from 'framer-motion';
 import { projects, experience, systemStages, caseStudies } from './data';
 import { posts } from './blog-data.js';
 import Playground from './Playground';
-import { FlipWords, CardSpotlight, TracingBeam, TiltCard } from './AceternityUI';
+import { CardSpotlight, TracingBeam, TiltCard } from './AceternityUI';
 import ThemeToggle from './ThemeToggle';
 
-const Sculpture = lazy(() => import('./Sculpture'));
-const Arrow = () => <span aria-hidden="true">↗</span>;
+import SignalSculpture from './SignalSculpture';
+import { navigateToSection } from './navigation.js';
+const Arrow = () => <span className="arrow-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M5 19 19 5M5 5h14v14" /></svg></span>;
 const sections = [['work', 'Work'], ['about', 'About'], ['experience', 'Journey'], ['writing', 'Writing']];
 
 export default function App() {
@@ -38,26 +39,11 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (e, id) => {
-    e.preventDefault();
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const behavior = reducedMotion ? 'instant' : 'smooth';
-    if (id === 'home') {
-      window.scrollTo({ top: 0, behavior });
-      if (window.location.hash !== '#home') {
-        window.history.pushState(null, '', '#home');
-      }
-      setActive('home');
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior, block: 'start' });
-        if (window.location.hash !== `#${id}`) {
-          window.history.pushState(null, '', `#${id}`);
-        }
-        setActive(id);
-      }
-    }
+  const handleNavClick = (event, id) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    navigateToSection(id);
+    setActive(id);
   };
 
   const smoothEase = [0.22, 1, 0.36, 1];
@@ -111,21 +97,21 @@ export default function App() {
       </header>
     </div>
     <main id="main">
-      <section className="hero wrap" id="home">
+      <section className="hero wrap" id="home" data-motion-paused={paused}>
         <div className="hero-matrix-bg" aria-hidden="true" />
         <div className="hero-ambient-glow" aria-hidden="true" />
-        <div className="edition"><span>THE ENGINEERING FIELD JOURNAL</span><span>RUST / ENERGY / INTERFACES</span></div>
+        <div className="edition"><span>INDEPENDENT MIND. CONNECTED SYSTEMS.</span><span>RUST / ENERGY / INTERFACES</span></div>
         <m.div className="hero-copy" {...reveal}>
-          <div className="hero-status-pill"><span className="pulse-dot" /><span>SYSTEMS &amp; INTERFACE ARCHITECTURE</span></div>
+          <div className="hero-status-pill"><span className="pulse-dot" /><span>RUST · ENERGY · OPEN SOURCE</span></div>
           <p className="eyebrow">SABIN REGMI — SOFTWARE ENGINEER</p>
-          <h1>Software for<br /><span className="serif"><FlipWords words={['the real world.', 'energy systems.', 'developer tools.', 'expressive motion.']} /></span><span className="orange">*</span></h1>
-          <p className="intro">Energy systems that stay reliable.<br />Developer tools that feel intuitive.<br /><strong>I build where the two meet.</strong></p>
+          <h1>Built for<br />the real world<span className="hero-period">.</span></h1>
+          <p className="intro">Reliable systems. Expressive interfaces.<br />I’m Sabin, a software engineer building<br className="desktop-break" /> where the two meet.</p>
           <div className="hero-actions"><a className="button dark shimmer" href="#work" onClick={e => handleNavClick(e, 'work')}>Explore my work <span aria-hidden="true">↓</span></a><a className="text-link" href="https://github.com/wheregmis" target="_blank" rel="noreferrer">GitHub <Arrow /></a></div>
           <p className="hero-footnote"><span className="status-dot" /> From battery controllers to expressive interfaces.</p>
         </m.div>
         <m.div className="system-panel" {...revealStagger(0.12)}>
-          <div className="panel-label"><span>FIG. 01 / FROM SIGNAL TO SCREEN</span><span className="system-badge"><span className="radar-pulse" /> LIVE SIMULATION</span></div>
-          <div className="system-scene"><Suspense fallback={<div className="scene-fallback">▥ → ▦ → ▤</div>}><Sculpture paused={paused} stage={stage} /></Suspense></div>
+          <div className="panel-label"><span>THE SYSTEM, IN MOTION</span><span className="system-badge"><span className="radar-pulse" /> INTERACTIVE STUDY</span></div>
+          <div className="system-scene"><SignalSculpture paused={paused} stage={stage} /></div>
           <div className="system-stages" aria-label="Explore the system">{systemStages.map((item, index) => <button key={item.name} aria-pressed={stage === index} onClick={() => setStage(index)}><small>0{index + 1}</small>{item.name}<span aria-hidden="true">{index < 2 ? '→' : '↗'}</span></button>)}</div>
           <div className="system-description" aria-live="polite">
             <m.div
@@ -145,7 +131,7 @@ export default function App() {
       </section>
       <m.div className="practice-strip wrap" {...reveal}><span>01 — RELIABLE SYSTEMS</span><span>02 — EXPRESSIVE INTERFACES</span><span>03 — OPEN-SOURCE TOOLS</span></m.div>
       <section className="section wrap" id="work">
-        <m.div className="section-heading" {...reveal}><div><p className="eyebrow">01 / SELECTED WORK</p><h2>Less telling.<br /><span className="serif">More showing.</span></h2></div><p className="section-note">Developer tools. Carefully considered.<br />Explore the interaction, then the thinking.</p></m.div>
+        <m.div className="section-heading" {...reveal}><div><p className="eyebrow">01 / SELECTED WORK</p><h2>Selected work<span className="heading-dot">.</span></h2></div><p className="section-note">A few things I’ve built.<br />Explore the details. Try the interactions.</p></m.div>
         {projects.map((project, index) => <m.article className="project-study" key={project.title} {...revealStagger(index * 0.1)}>
           <div className="project-overview"><p className="eyebrow">0{index + 1} / {project.category}</p><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><a className="text-link" href={project.href} target="_blank" rel="noreferrer">{project.type === 'motion' ? 'Explore the library' : project.type === 'threadlane' ? 'Explore Threadlane on GitHub' : 'Open the live converter'} <Arrow /></a></div>
           {project.type === 'motion' ? <CardSpotlight color="rgba(206, 73, 39, 0.1)"><Playground /></CardSpotlight> : project.type === 'threadlane' ? <TiltCard><CardSpotlight color="rgba(206, 73, 39, 0.1)"><div className="threadlane-preview"><div className="panel-label"><span>NATIVE WORKSPACE / RUST + GPUI</span><span>03</span></div><a href={project.href} target="_blank" rel="noreferrer" aria-label="Explore Threadlane workspace on GitHub"><img src="/images/threadlane-workspace.jpg" alt="Threadlane native desktop workspace with project sessions, agent conversation, and command completion" loading="lazy" /></a><div className="threadlane-features"><span>Branching conversations</span><span>Persistent terminals</span><span>Durable execution</span></div><a className="text-link" href={project.href} target="_blank" rel="noreferrer">View source & setup <Arrow /></a></div></CardSpotlight></TiltCard> : <CardSpotlight color="rgba(206, 73, 39, 0.08)"><div className="converter-preview"><div className="panel-label"><span>WORKFLOW / HTML TO RSX</span><span>02</span></div><div className="conversion-step"><span>INPUT · HTML</span><pre>{'<div class="hello">\n  Hello, world.\n</div>'}</pre></div><div className="conversion-arrow" aria-hidden="true">↓</div><div className="conversion-step"><span>OUTPUT · RSX</span><pre>{'div { class: "hello",\n  "Hello, world."\n}'}</pre></div><a className="button dark" href={project.href} target="_blank" rel="noreferrer">Try your own HTML <Arrow /></a></div></CardSpotlight>}

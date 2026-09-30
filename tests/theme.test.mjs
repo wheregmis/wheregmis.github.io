@@ -8,7 +8,7 @@ test('theme initialization and resolution respects preference order', () => {
   const mockStorage = {};
   const mockAttrs = {};
   const metaElements = {
-    'theme-color': { content: '#f5f3ed', setAttribute(k, v) { this.content = v; } },
+    'theme-color': { content: '#f6f7f9', setAttribute(k, v) { this.content = v; } },
     'color-scheme': { content: 'light dark', setAttribute(k, v) { this.content = v; } }
   };
 
@@ -69,7 +69,7 @@ test('theme initialization and resolution respects preference order', () => {
   applyTheme('dark');
   assert.equal(mockAttrs['data-theme'], 'dark');
   assert.equal(mockStorage['theme'], 'dark');
-  assert.equal(metaElements['theme-color'].content, '#141815');
+  assert.equal(metaElements['theme-color'].content, '#111521');
   assert.equal(metaElements['color-scheme'].content, 'dark');
   assert.equal(dispatchedEvents.at(-1)?.detail?.theme, 'dark');
 
@@ -77,7 +77,7 @@ test('theme initialization and resolution respects preference order', () => {
   applyTheme('light');
   assert.equal(mockAttrs['data-theme'], 'light');
   assert.equal(mockStorage['theme'], 'light');
-  assert.equal(metaElements['theme-color'].content, '#f5f3ed');
+  assert.equal(metaElements['theme-color'].content, '#f6f7f9');
   assert.equal(metaElements['color-scheme'].content, 'light');
   assert.equal(dispatchedEvents.at(-1)?.detail?.theme, 'light');
 
