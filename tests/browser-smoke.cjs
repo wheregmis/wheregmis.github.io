@@ -6,12 +6,13 @@ const assert = require('node:assert/strict');
  const errors=[];
  page.on('pageerror', error => errors.push(error.message));
  await page.goto(process.env.PORTFOLIO_URL || 'http://127.0.0.1:5173', {waitUntil:'networkidle'});
- await page.locator('canvas').waitFor();
+ await page.locator('.signal-sculpture').waitFor();
  for (const id of ['work','about','experience','contact']) { await page.locator('#'+id).scrollIntoViewIfNeeded(); await page.waitForTimeout(700); }
  await page.evaluate(() => window.scrollTo({top:0,behavior:'instant'}));
  await page.screenshot({path:require('node:path').join(require('node:os').tmpdir(), 'portfolio-desktop.png'),fullPage:true});
  await page.getByRole('button',{name:'Pause motion'}).click();
  assert.equal(await page.getByRole('button',{name:'Play motion'}).getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('.signal-sculpture').getAttribute('data-paused'), 'true');
  await page.getByRole('button',{name:'02 Telemetry'}).click();
  await page.getByRole('heading',{name:'Make system behavior visible.'}).waitFor();
  await page.getByRole('heading',{name:'Research Assistant'}).waitFor();
